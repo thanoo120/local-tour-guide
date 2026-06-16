@@ -283,9 +283,19 @@ input, select, textarea {
   padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px);
 }
 
+/* Safe area padding for top (status bar / notch) */
+.pt-safe {
+  padding-top: max(1.5rem, calc(env(safe-area-inset-top, 0px) + 0.5rem));
+}
+
+.pt-safe-hero {
+  padding-top: max(3rem, calc(env(safe-area-inset-top, 0px) + 1rem));
+}
+
 /* Page content wrapper */
 .page-content {
   flex: 1;
-  padding-bottom: 80px; /* Space for bottom nav */
+  padding-bottom: 88px;
   overflow-y: auto;
+  overflow-x: hidden;
 }

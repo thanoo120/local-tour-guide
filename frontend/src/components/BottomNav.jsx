@@ -13,7 +13,7 @@ export default function BottomNav({ favoritesCount = 0 }) {
   return (
     <nav
       id="bottom-nav"
-      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50
+      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-107.5 z-50
                  glass border-t border-surface-200 dark:border-surface-800"
       style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 8px)' }}
     >
@@ -43,16 +43,16 @@ export default function BottomNav({ favoritesCount = 0 }) {
 
                 {/* Favorites badge */}
                 {item.icon === 'favorite' && favoritesCount > 0 && (
-                  <span className="absolute -top-0.5 right-2 min-w-[18px] h-[18px] 
-                                   bg-red-500 text-white text-[10px] font-bold 
+                  <span className="absolute -top-0.5 right-2 min-w-4.5 h-4.5
+                                   bg-red-500 text-white text-[10px] font-bold
                                    rounded-full flex items-center justify-center px-1
                                    animate-fade-in">
                     {favoritesCount > 9 ? '9+' : favoritesCount}
                   </span>
                 )}
 
-                <span className={`text-[10px] font-medium transition-all duration-300
-                                  ${isActive ? 'font-semibold' : ''}`}>
+                <span className={`text-[11px] transition-all duration-300
+                                  ${isActive ? 'font-semibold' : 'font-medium'}`}>
                   {item.label}
                 </span>
               </>
