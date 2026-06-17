@@ -19,8 +19,9 @@ export default function AttractionCard({ attraction, userPosition, isFavorite, o
   return (
     <Link
       to={`/attraction/${attraction.id}`}
-      className={`block bg-white dark:bg-surface-900 rounded-2xl overflow-hidden shadow-sm
-                  hover:shadow-md active:scale-[0.98] transition-all duration-300
+      className={`block bg-white dark:bg-surface-900 rounded-2xl overflow-hidden
+                  shadow-sm hover:shadow-lg border border-surface-100 dark:border-surface-800
+                  active:scale-[0.98] transition-all duration-300
                   animate-fade-in-up ${staggerClass}`}
     >
       {/* Image */}
@@ -35,7 +36,7 @@ export default function AttractionCard({ attraction, userPosition, isFavorite, o
         />
 
         {/* Overlay gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent" />
 
         {/* Favorite button */}
         <div className="absolute top-3 right-3">

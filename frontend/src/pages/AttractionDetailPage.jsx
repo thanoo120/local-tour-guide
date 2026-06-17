@@ -62,13 +62,14 @@ export default function AttractionDetailPage({ isFavorite, onToggleFavorite }) {
           className="w-full h-full object-cover"
           onError={(e) => { e.target.style.display = 'none'; }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-black/20" />
 
         {/* Back button */}
         <button
           onClick={() => navigate(-1)}
-          className="absolute top-4 left-4 w-10 h-10 rounded-full glass flex items-center justify-center
+          className="absolute left-4 w-10 h-10 rounded-full glass flex items-center justify-center
                      text-white active:scale-90 transition-transform"
+          style={{ top: 'max(1rem, calc(env(safe-area-inset-top, 0px) + 0.5rem))' }}
           type="button"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -77,7 +78,7 @@ export default function AttractionDetailPage({ isFavorite, onToggleFavorite }) {
         </button>
 
         {/* Favorite button */}
-        <div className="absolute top-4 right-4">
+        <div className="absolute right-4" style={{ top: 'max(1rem, calc(env(safe-area-inset-top, 0px) + 0.5rem))' }}>
           <FavoriteButton
             isFavorite={isFavorite(attraction.id)}
             onToggle={() => onToggleFavorite(attraction.id)}
@@ -206,7 +207,7 @@ export default function AttractionDetailPage({ isFavorite, onToggleFavorite }) {
               }] : []),
             ].map((item) => (
               <div key={item.label} className="flex gap-3 bg-surface-50 dark:bg-surface-800 rounded-2xl p-3.5">
-                <span className="text-xl flex-shrink-0">{item.icon}</span>
+                <span className="text-xl shrink-0">{item.icon}</span>
                 <div>
                   <div className="text-xs text-surface-400 dark:text-surface-500 font-medium mb-0.5">{item.label}</div>
                   <div className="text-sm text-surface-700 dark:text-surface-300 font-medium">{item.value}</div>
@@ -214,6 +215,26 @@ export default function AttractionDetailPage({ isFavorite, onToggleFavorite }) {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Map deep-link */}
+        <div className="pb-2">
+          <h2 className="font-heading font-semibold text-surface-900 dark:text-surface-100 text-lg mb-3">
+            Get Directions
+          </h2>
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${attraction.latitude},${attraction.longitude}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2.5 w-full bg-primary-600 active:bg-primary-700
+                       text-white font-semibold text-sm rounded-2xl py-3.5 transition-colors touch-target"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
+              <circle cx="12" cy="9" r="2.5" />
+            </svg>
+            Open in Google Maps
+          </a>
         </div>
       </div>
     </div>

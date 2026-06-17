@@ -14,7 +14,7 @@ export default function FavoritesPage({ favorites, isFavorite, onToggleFavorite,
   return (
     <div className="page-content">
       {/* Header */}
-      <div className="px-4 pt-6 pb-4 flex items-center justify-between">
+      <div className="px-4 pb-4 pt-safe flex items-center justify-between">
         <div>
           <h1 className="font-heading font-bold text-surface-900 dark:text-surface-100 text-2xl mb-1">
             Favorites
