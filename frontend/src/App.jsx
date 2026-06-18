@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { useFavorites } from './hooks/useFavorites';
 import BottomNav from './components/BottomNav';
+import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import ExplorePage from './pages/ExplorePage';
 import FavoritesPage from './pages/FavoritesPage';
@@ -11,6 +12,7 @@ export default function App() {
 
   return (
     <>
+      <Header />
       <Routes>
         <Route
           path="/"

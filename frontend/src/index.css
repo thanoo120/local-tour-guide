@@ -4,25 +4,27 @@
    DESIGN TOKENS & CSS CUSTOM PROPERTIES
    ============================================ */
 @theme {
-  --color-primary-50: #f0fdfa;
-  --color-primary-100: #ccfbf1;
-  --color-primary-200: #99f6e4;
-  --color-primary-300: #5eead4;
-  --color-primary-400: #2dd4bf;
-  --color-primary-500: #14b8a6;
-  --color-primary-600: #0d9488;
-  --color-primary-700: #0f766e;
-  --color-primary-800: #115e59;
-  --color-primary-900: #134e4a;
+  /* Forest green primary (LankaGuide brand) */
+  --color-primary-50: #edfaf4;
+  --color-primary-100: #c4f0da;
+  --color-primary-200: #82d7ba;
+  --color-primary-300: #52b899;
+  --color-primary-400: #2d9e80;
+  --color-primary-500: #016b54;
+  --color-primary-600: #00513f;
+  --color-primary-700: #003d2e;
+  --color-primary-800: #002a1f;
+  --color-primary-900: #001a12;
 
-  --color-accent-50: #fffbeb;
-  --color-accent-100: #fef3c7;
-  --color-accent-200: #fde68a;
-  --color-accent-300: #fcd34d;
-  --color-accent-400: #fbbf24;
-  --color-accent-500: #f59e0b;
-  --color-accent-600: #d97706;
-  --color-accent-700: #b45309;
+  /* Amber accent */
+  --color-accent-50: #fff8ed;
+  --color-accent-100: #fde8c2;
+  --color-accent-200: #fbd08a;
+  --color-accent-300: #f8b24a;
+  --color-accent-400: #f59721;
+  --color-accent-500: #fd9d1a;
+  --color-accent-600: #895100;
+  --color-accent-700: #5c3600;
 
   --color-surface-50: #f8fafc;
   --color-surface-100: #f1f5f9;
@@ -36,7 +38,7 @@
   --color-surface-900: #0f172a;
   --color-surface-950: #020617;
 
-  --font-heading: 'Outfit', system-ui, sans-serif;
+  --font-heading: 'Epilogue', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
 }
 
@@ -295,7 +297,24 @@ input, select, textarea {
 /* Page content wrapper */
 .page-content {
   flex: 1;
+  padding-top: 64px; /* fixed header height */
   padding-bottom: 88px;
   overflow-y: auto;
-  overflow-x: hidden;
+}
+
+/* Hide scrollbar utility */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Glass card (lighter than glass) */
+.glass-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+@media (prefers-color-scheme: dark) {
+  .glass-card {
+    background: rgba(15, 23, 42, 0.75);
+  }
 }

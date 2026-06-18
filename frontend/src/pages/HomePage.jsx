@@ -1,136 +1,124 @@
+import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAttractions } from '../hooks/useAttractions';
 import { useGeolocation } from '../hooks/useGeolocation';
 import AttractionCard from '../components/AttractionCard';
 
+const CATEGORIES = [
+  { label: 'Nature', icon: '🌿' },
+  { label: 'Historical', icon: '🏛️' },
+  { label: 'Beach', icon: '🏖️' },
+  { label: 'Religious', icon: '🕌' },
+  { label: 'Hotels', icon: '🏨' },
+];
+
+const PAD = '20px';
+
 export default function HomePage({ isFavorite, onToggleFavorite }) {
   const { getFeaturedAttractions, loading } = useAttractions();
-  const { position, permissionStatus, requestPosition, isUsingDefault } = useGeolocation();
+  const { position } = useGeolocation();
+  const [activeCategory, setActiveCategory] = useState('Nature');
+  const chipScrollRef = useRef(null);
 
   const featured = getFeaturedAttractions();
 
   return (
     <div className="page-content">
-      {/* Hero Header */}
-      <div className="relative bg-linear-to-br from-primary-800 via-primary-700 to-primary-500 px-5 pb-8 overflow-hidden pt-safe-hero">
-        {/* Background decoration */}
-        <div className="absolute inset-0 opacity-10 pointer-events-none">
-          <div className="absolute top-6 right-6 w-36 h-36 rounded-full border-4 border-white" />
-          <div className="absolute top-16 right-20 w-16 h-16 rounded-full border-2 border-white" />
-          <div className="absolute bottom-0 left-6 w-24 h-24 rounded-full border-2 border-white" />
-        </div>
 
-        <div className="relative">
-          <p className="text-primary-200 text-xs font-semibold tracking-widest uppercase mb-2">
-            🌏 Welcome to
-          </p>
-          <h1 className="text-white font-heading text-4xl font-bold mb-2 leading-tight">
-            Ceylon Wanderer
-          </h1>
-          <p className="text-primary-100 text-sm leading-relaxed max-w-xs">
-            Discover the beauty of Sri Lanka — from ancient fortresses to pristine beaches.
-          </p>
-
-          {/* Location status */}
-          <div className="mt-5">
-            {isUsingDefault ? (
-              <button
-                onClick={requestPosition}
-                className="flex items-center gap-2 bg-white/20 hover:bg-white/30 active:scale-95
-                           text-white text-sm font-medium px-4 py-2.5 rounded-full transition-all border border-white/20"
-                type="button"
-              >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
-                  <circle cx="12" cy="9" r="2.5" />
-                </svg>
-                Enable location for distances
-              </button>
-            ) : (
-              <div className="inline-flex items-center gap-2 bg-white/15 text-primary-100 text-sm px-3 py-1.5 rounded-full">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                Location active — distances shown
-              </div>
-            )}
+      {/* Search */}
+      <div style={{ padding: `16px ${PAD} 20px` }}>
+        <div style={{ position: 'relative' }}>
+          <div style={{
+            position: 'absolute', top: 0, bottom: 0, left: '16px',
+            display: 'flex', alignItems: 'center', pointerEvents: 'none',
+            color: '#94a3b8',
+          }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
           </div>
+          <input
+            type="text"
+            placeholder="Where to, traveler?"
+            className="bg-surface-100 dark:bg-surface-800 text-surface-900 dark:text-surface-100
+                       placeholder:text-surface-400 rounded-xl border-none outline-none
+                       shadow-sm focus:ring-2 focus:ring-primary-500/30 transition-shadow text-sm"
+            style={{ width: '100%', height: '56px', paddingLeft: '48px', paddingRight: '16px' }}
+          />
         </div>
       </div>
 
-      {/* Stats bar */}
-      <div className="flex divide-x divide-surface-100 dark:divide-surface-800 bg-white dark:bg-surface-900 shadow-sm">
-        {[
-          {
-            value: '15',
-            label: 'Attractions',
-            icon: (
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary-500">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
-                <circle cx="12" cy="9" r="2.5" />
-              </svg>
-            ),
-          },
-          {
-            value: '4',
-            label: 'Categories',
-            icon: (
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary-500">
-                <rect x="3" y="3" width="7" height="7" rx="1" />
-                <rect x="14" y="3" width="7" height="7" rx="1" />
-                <rect x="3" y="14" width="7" height="7" rx="1" />
-                <rect x="14" y="14" width="7" height="7" rx="1" />
-              </svg>
-            ),
-          },
-          {
-            value: '3',
-            label: 'UNESCO Sites',
-            icon: (
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-primary-500">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-              </svg>
-            ),
-          },
-        ].map((stat) => (
-          <div key={stat.label} className="flex-1 flex flex-col items-center py-3.5 gap-1">
-            {stat.icon}
-            <div className="font-heading font-bold text-primary-600 dark:text-primary-400 text-lg leading-none">{stat.value}</div>
-            <div className="text-surface-500 dark:text-surface-400 text-[11px] font-medium">{stat.label}</div>
-          </div>
-        ))}
+      {/* Category Chips */}
+      <div style={{ marginBottom: '24px' }}>
+        <div
+          ref={chipScrollRef}
+          className="hide-scrollbar"
+          style={{
+            overflowX: 'auto',
+            display: 'flex',
+            gap: '10px',
+            paddingLeft: PAD,
+            paddingRight: PAD,
+            paddingBottom: '4px',
+          }}
+        >
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat.label}
+              type="button"
+              onClick={() => setActiveCategory(cat.label)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '6px',
+                padding: '8px 16px', borderRadius: '999px',
+                fontSize: '14px', fontWeight: '600',
+                whiteSpace: 'nowrap', flexShrink: 0,
+                cursor: 'pointer', border: 'none',
+                transition: 'all 0.2s',
+                background: activeCategory === cat.label ? '#00513f' : '#f1f5f9',
+                color: activeCategory === cat.label ? '#ffffff' : '#475569',
+                boxShadow: activeCategory === cat.label ? '0 2px 8px rgba(0,81,63,0.35)' : 'none',
+              }}
+            >
+              <span style={{ fontSize: '16px' }}>{cat.icon}</span>
+              {cat.label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Featured section */}
-      <div className="px-4 pt-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-heading font-bold text-surface-900 dark:text-surface-100 text-xl">
-            Featured Places
+      {/* Featured for You */}
+      <div style={{ padding: `0 ${PAD}` }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '16px' }}>
+          <h2 className="font-heading font-bold text-surface-900 dark:text-surface-100"
+              style={{ fontSize: '24px', lineHeight: '1.2' }}>
+            Featured for You
           </h2>
           <Link
             to="/explore"
-            className="flex items-center gap-1 text-primary-600 dark:text-primary-400 text-sm font-semibold hover:underline"
+            className="text-primary-600 dark:text-primary-400 hover:underline"
+            style={{ fontSize: '14px', fontWeight: '600', marginBottom: '2px' }}
           >
             See all
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
           </Link>
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 gap-4">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {[1, 2, 3].map((i) => (
-              <div key={i} className="rounded-2xl overflow-hidden border border-surface-100 dark:border-surface-800">
-                <div className="skeleton h-44 w-full" />
+              <div key={i} className="rounded-xl overflow-hidden shadow-md">
+                <div className="skeleton" style={{ aspectRatio: '3/2' }} />
                 <div className="bg-white dark:bg-surface-900 p-4 space-y-2">
-                  <div className="skeleton h-4 w-24 rounded-full" />
                   <div className="skeleton h-5 w-3/4 rounded" />
+                  <div className="skeleton h-4 w-1/3 rounded" />
                   <div className="skeleton h-4 w-full rounded" />
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {featured.map((attraction, i) => (
               <AttractionCard
                 key={attraction.id}
@@ -145,29 +133,66 @@ export default function HomePage({ isFavorite, onToggleFavorite }) {
         )}
       </div>
 
-      {/* Quick categories */}
-      <div className="px-4 pt-6 pb-4">
-        <h2 className="font-heading font-bold text-surface-900 dark:text-surface-100 text-xl mb-4">
-          Browse by Category
-        </h2>
-        <div className="grid grid-cols-3 gap-3">
-          {[
-            { name: 'Hotels', emoji: '🏨', color: 'from-blue-500 to-blue-700', path: '/explore?category=Hotels' },
-            { name: 'Nature', emoji: '🌿', color: 'from-emerald-500 to-emerald-700', path: '/explore?category=Nature' },
-            { name: 'Historical', emoji: '🏛️', color: 'from-amber-500 to-amber-700', path: '/explore?category=Historical' },
-          ].map((cat) => (
-            <Link
-              key={cat.name}
-              to={cat.path}
-              className={`bg-linear-to-br ${cat.color} rounded-2xl p-4 flex flex-col items-center
-                          justify-center gap-2 active:scale-95 transition-transform shadow-md aspect-square`}
+      {/* Travel Essential Banner */}
+      <div style={{ padding: `32px ${PAD} 16px` }}>
+        <div style={{
+          background: '#fd9d1a', borderRadius: '16px',
+          padding: '24px', position: 'relative', overflow: 'hidden',
+        }}>
+          {/* Decorative circles */}
+          <div style={{
+            position: 'absolute', bottom: '-32px', right: '-32px',
+            width: '160px', height: '160px', borderRadius: '50%',
+            background: 'rgba(255,255,255,0.10)',
+          }} />
+          <div style={{
+            position: 'absolute', bottom: '32px', right: '32px',
+            width: '80px', height: '80px', borderRadius: '50%',
+            background: 'rgba(255,255,255,0.10)',
+          }} />
+
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <span style={{
+              display: 'inline-block', background: 'rgba(255,255,255,0.22)',
+              color: '#451a03', fontSize: '11px', fontWeight: '700',
+              textTransform: 'uppercase', letterSpacing: '0.1em',
+              padding: '4px 12px', borderRadius: '999px', marginBottom: '12px',
+            }}>
+              Travel Essential
+            </span>
+            <h2 className="font-heading" style={{
+              fontSize: '22px', fontWeight: '700', color: '#1c0a00',
+              marginBottom: '8px', lineHeight: '1.3',
+            }}>
+              Safety First in Sri Lanka
+            </h2>
+            <p style={{ color: '#78350f', fontSize: '14px', lineHeight: '1.6', marginBottom: '16px', maxWidth: '280px' }}>
+              Get the latest travel advisories, currency tips, and emergency contact information for your worry-free journey.
+            </p>
+            <button
+              type="button"
+              style={{
+                background: '#00513f', color: '#fff',
+                padding: '10px 24px', borderRadius: '999px',
+                fontSize: '14px', fontWeight: '600', border: 'none', cursor: 'pointer',
+              }}
             >
-              <span className="text-3xl">{cat.emoji}</span>
-              <span className="text-white text-xs font-bold tracking-wide">{cat.name}</span>
-            </Link>
-          ))}
+              Read Guide
+            </button>
+          </div>
+
+          {/* Shield icon */}
+          <div style={{
+            position: 'absolute', bottom: '16px', right: '24px',
+            color: 'rgba(28,10,0,0.12)', pointerEvents: 'none',
+          }}>
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
+            </svg>
+          </div>
         </div>
       </div>
+
     </div>
   );
 }
