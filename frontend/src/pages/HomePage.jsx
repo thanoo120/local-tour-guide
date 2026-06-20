@@ -15,12 +15,16 @@ const CATEGORIES = [
 const PAD = '20px';
 
 export default function HomePage({ isFavorite, onToggleFavorite }) {
-  const { getFeaturedAttractions, loading } = useAttractions();
+  const { getFeaturedAttractions, getAttractionsByCategory, loading } = useAttractions();
   const { position } = useGeolocation();
-  const [activeCategory, setActiveCategory] = useState('Nature');
+  const [activeCategory, setActiveCategory] = useState(null);
   const chipScrollRef = useRef(null);
 
   const featured = getFeaturedAttractions();
+  const displayed = activeCategory
+    ? getAttractionsByCategory(activeCategory)
+    : featured;
+  const sectionTitle = activeCategory ? `${activeCategory} Spots` : 'Featured for You';
 
   return (
     <div className="page-content">
@@ -64,27 +68,30 @@ export default function HomePage({ isFavorite, onToggleFavorite }) {
             paddingBottom: '4px',
           }}
         >
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.label}
-              type="button"
-              onClick={() => setActiveCategory(cat.label)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: '6px',
-                padding: '8px 16px', borderRadius: '999px',
-                fontSize: '14px', fontWeight: '600',
-                whiteSpace: 'nowrap', flexShrink: 0,
-                cursor: 'pointer', border: 'none',
-                transition: 'all 0.2s',
-                background: activeCategory === cat.label ? '#00513f' : '#f1f5f9',
-                color: activeCategory === cat.label ? '#ffffff' : '#475569',
-                boxShadow: activeCategory === cat.label ? '0 2px 8px rgba(0,81,63,0.35)' : 'none',
-              }}
-            >
-              <span style={{ fontSize: '16px' }}>{cat.icon}</span>
-              {cat.label}
-            </button>
-          ))}
+          {CATEGORIES.map((cat) => {
+            const isActive = activeCategory === cat.label;
+            return (
+              <button
+                key={cat.label}
+                type="button"
+                onClick={() => setActiveCategory(isActive ? null : cat.label)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '6px',
+                  padding: '8px 16px', borderRadius: '999px',
+                  fontSize: '14px', fontWeight: '600',
+                  whiteSpace: 'nowrap', flexShrink: 0,
+                  cursor: 'pointer', border: 'none',
+                  transition: 'all 0.2s',
+                  background: isActive ? '#00513f' : '#f1f5f9',
+                  color: isActive ? '#ffffff' : '#475569',
+                  boxShadow: isActive ? '0 2px 8px rgba(0,81,63,0.35)' : 'none',
+                }}
+              >
+                <span style={{ fontSize: '16px' }}>{cat.icon}</span>
+                {cat.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -93,7 +100,7 @@ export default function HomePage({ isFavorite, onToggleFavorite }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '16px' }}>
           <h2 className="font-heading font-bold text-surface-900 dark:text-surface-100"
               style={{ fontSize: '24px', lineHeight: '1.2' }}>
-            Featured for You
+            {sectionTitle}
           </h2>
           <Link
             to="/explore"
