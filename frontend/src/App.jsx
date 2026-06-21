@@ -1,5 +1,6 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useFavorites } from './hooks/useFavorites';
+import { useAuth } from './hooks/useAuth';
 import BottomNav from './components/BottomNav';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
@@ -7,13 +8,19 @@ import ExplorePage from './pages/ExplorePage';
 import FavoritesPage from './pages/FavoritesPage';
 import AttractionDetailPage from './pages/AttractionDetailPage';
 import ProfilePage from './pages/ProfilePage';
+import LoginPage from './pages/LoginPage';
 
 export default function App() {
   const { favorites, isFavorite, toggleFavorite, clearFavorites, favoritesCount } = useFavorites();
+  const { user, isLoggedIn, login, signup, logout } = useAuth();
+
+  if (!isLoggedIn) {
+    return <LoginPage onLogin={login} onSignup={signup} />;
+  }
 
   return (
     <>
-      <Header />
+      <Header user={user} />
       <Routes>
         <Route
           path="/"
@@ -56,9 +63,14 @@ export default function App() {
         <Route
           path="/profile"
           element={
-            <ProfilePage favoritesCount={favoritesCount} />
+            <ProfilePage
+              user={user}
+              favoritesCount={favoritesCount}
+              onLogout={logout}
+            />
           }
         />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
       <BottomNav favoritesCount={favoritesCount} />

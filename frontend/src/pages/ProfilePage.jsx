@@ -195,8 +195,11 @@ function MenuItem({ item }) {
   );
 }
 
-export default function ProfilePage({ favoritesCount = 0 }) {
+export default function ProfilePage({ user, favoritesCount = 0, onLogout }) {
   const { attractions } = useAttractions();
+  const initials = user?.initials ?? '?';
+  const displayName = user?.name ?? 'Traveler';
+  const displayEmail = user?.email ?? '';
 
   const stats = STATS.map(s =>
     s.label === 'Favorites' ? { ...s, value: String(favoritesCount) } : s
@@ -217,15 +220,15 @@ export default function ProfilePage({ favoritesCount = 0 }) {
           <span style={{
             fontFamily: 'var(--font-heading)', fontWeight: '700',
             fontSize: '28px', color: '#fff', letterSpacing: '1px',
-          }}>TG</span>
+          }}>{initials}</span>
         </div>
 
         <h2 className="font-heading font-bold text-surface-900 dark:text-surface-100"
             style={{ fontSize: '22px', marginBottom: '4px' }}>
-          Tour Guide
+          {displayName}
         </h2>
         <p className="text-surface-500 dark:text-surface-400" style={{ fontSize: '14px', marginBottom: '16px' }}>
-          Explorer · Sri Lanka enthusiast
+          {displayEmail}
         </p>
 
         <button
@@ -302,6 +305,7 @@ export default function ProfilePage({ favoritesCount = 0 }) {
       <div style={{ padding: '16px 20px 8px' }}>
         <button
           type="button"
+          onClick={onLogout}
           style={{
             width: '100%', padding: '14px',
             background: '#fff1f2', color: '#e11d48',
