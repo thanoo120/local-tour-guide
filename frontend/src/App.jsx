@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage';
 import ExplorePage from './pages/ExplorePage';
 import FavoritesPage from './pages/FavoritesPage';
 import AttractionDetailPage from './pages/AttractionDetailPage';
+import ProfilePage from './pages/ProfilePage';
 
 export default function App() {
   const { favorites, isFavorite, toggleFavorite, clearFavorites, favoritesCount } = useFavorites();
@@ -50,6 +51,12 @@ export default function App() {
               isFavorite={isFavorite}
               onToggleFavorite={toggleFavorite}
             />
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProfilePage favoritesCount={favoritesCount} />
           }
         />
       </Routes>

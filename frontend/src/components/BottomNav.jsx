@@ -33,7 +33,7 @@ const NAV_ITEMS = [
     ),
   },
   {
-    path: null,
+    path: '/profile',
     label: 'Profile',
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'}
@@ -55,20 +55,6 @@ export default function BottomNav({ favoritesCount = 0 }) {
     >
       <div className="flex items-center justify-around px-2 pt-2 pb-1">
         {NAV_ITEMS.map((item) => {
-          if (!item.path) {
-            return (
-              <button
-                key={item.label}
-                type="button"
-                className="flex flex-col items-center justify-center gap-0.5 px-4 py-1.5
-                           text-surface-400 dark:text-surface-500 transition-all"
-              >
-                {item.icon(false)}
-                <span className="text-[11px] font-medium">{item.label}</span>
-              </button>
-            );
-          }
-
           return (
             <NavLink
               key={item.path}
