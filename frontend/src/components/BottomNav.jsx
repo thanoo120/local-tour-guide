@@ -59,13 +59,13 @@ export default function BottomNav({ favoritesCount = 0 }) {
                  shadow-[0_-4px_12px_rgba(0,0,0,0.08)] dark:shadow-[0_-4px_20px_rgba(0,0,0,0.4)]"
       style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 12px)' }}
     >
-      <div className="flex items-center justify-around px-2 pt-2 pb-1">
+      <div className="flex items-end justify-around px-2 pt-2 pb-1">
         {NAV_ITEMS.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
             end={item.path === '/explore'}
-            className="relative"
+            className="relative flex items-center justify-center"
           >
             {({ isActive }) => (
               <div className={`flex flex-col items-center justify-center gap-0.5 transition-all duration-200
