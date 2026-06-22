@@ -57,5 +57,21 @@ export function useAuth() {
     setUser(null);
   }, []);
 
-  return { user, login, signup, logout, isLoggedIn: !!user };
+  const updateProfile = useCallback(({ name, email }) => {
+    if (!name.trim()) return { ok: false, error: 'Name is required.' };
+    if (!email.includes('@')) return { ok: false, error: 'Enter a valid email.' };
+    const initials = name.trim().split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+    const updated = { ...loadUser(), name: name.trim(), email, initials };
+    saveUser(updated);
+    setUser(updated);
+    return { ok: true };
+  }, []);
+
+  const updateProfilePhoto = useCallback((photoDataUrl) => {
+    const updated = { ...loadUser(), photo: photoDataUrl };
+    saveUser(updated);
+    setUser(updated);
+  }, []);
+
+  return { user, login, signup, logout, updateProfile, updateProfilePhoto, isLoggedIn: !!user };
 }
