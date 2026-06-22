@@ -70,6 +70,16 @@ export default function App() {
             />
           }
         />
+        <Route
+          path="/bookings"
+          element={
+            <div className="page-content" style={{ padding: '32px 20px', textAlign: 'center', color: '#6b7280' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: '64px', color: '#d1d5db', display: 'block', marginBottom: '16px' }}>calendar_month</span>
+              <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#111827', marginBottom: '8px' }}>No Bookings Yet</h2>
+              <p style={{ fontSize: '14px' }}>Your trip bookings will appear here.</p>
+            </div>
+          }
+        />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 

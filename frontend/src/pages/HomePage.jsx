@@ -5,14 +5,12 @@ import { useGeolocation } from '../hooks/useGeolocation';
 import AttractionCard from '../components/AttractionCard';
 
 const CATEGORIES = [
-  { label: 'Nature', icon: '🌿' },
-  { label: 'Historical', icon: '🏛️' },
-  { label: 'Beach', icon: '🏖️' },
-  { label: 'Religious', icon: '🕌' },
-  { label: 'Hotels', icon: '🏨' },
+  { label: 'Nature',     icon: 'forest' },
+  { label: 'Historical', icon: 'account_balance' },
+  { label: 'Beach',      icon: 'beach_access' },
+  { label: 'Religious',  icon: 'temple_hindu' },
+  { label: 'Adventure',  icon: 'hiking' },
 ];
-
-const PAD = '20px';
 
 export default function HomePage({ isFavorite, onToggleFavorite }) {
   const { getFeaturedAttractions, getAttractionsByCategory, loading } = useAttractions();
@@ -21,35 +19,37 @@ export default function HomePage({ isFavorite, onToggleFavorite }) {
   const chipScrollRef = useRef(null);
 
   const featured = getFeaturedAttractions();
-  const displayed = activeCategory
-    ? getAttractionsByCategory(activeCategory)
-    : featured;
+  const displayed = activeCategory ? getAttractionsByCategory(activeCategory) : featured;
   const sectionTitle = activeCategory ? `${activeCategory} Spots` : 'Featured for You';
 
   return (
-    <div className="page-content">
+    <div className="page-content" style={{ paddingBottom: '120px' }}>
 
       {/* Search */}
-      <div style={{ padding: `16px ${PAD} 20px` }}>
+      <div style={{ padding: '16px 20px 20px' }}>
         <div style={{ position: 'relative' }}>
-          <div style={{
-            position: 'absolute', top: 0, bottom: 0, left: '16px',
-            display: 'flex', alignItems: 'center', pointerEvents: 'none',
-            color: '#94a3b8',
-          }}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <circle cx="11" cy="11" r="8" />
-              <path d="M21 21l-4.35-4.35" />
-            </svg>
-          </div>
+          <span
+            className="material-symbols-outlined"
+            style={{
+              position: 'absolute', top: '50%', left: '14px',
+              transform: 'translateY(-50%)',
+              color: '#9ca3af', fontSize: '20px', pointerEvents: 'none',
+            }}
+          >
+            search
+          </span>
           <input
             type="text"
             placeholder="Where to, traveler?"
-            className="bg-surface-100 dark:bg-surface-800 text-surface-900 dark:text-surface-100
-                       placeholder:text-surface-400 rounded-xl border-none outline-none
-                       shadow-sm focus:ring-2 focus:ring-primary-500/30 transition-shadow text-sm"
-            style={{ width: '100%', height: '56px', paddingLeft: '48px', paddingRight: '16px' }}
+            style={{
+              width: '100%', height: '52px',
+              paddingLeft: '44px', paddingRight: '16px',
+              borderRadius: '14px', border: 'none',
+              background: '#f3f4f6',
+              fontSize: '15px', color: '#374151',
+              outline: 'none',
+              boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+            }}
           />
         </div>
       </div>
@@ -60,12 +60,8 @@ export default function HomePage({ isFavorite, onToggleFavorite }) {
           ref={chipScrollRef}
           className="hide-scrollbar"
           style={{
-            overflowX: 'auto',
-            display: 'flex',
-            gap: '10px',
-            paddingLeft: PAD,
-            paddingRight: PAD,
-            paddingBottom: '4px',
+            overflowX: 'auto', display: 'flex',
+            gap: '10px', paddingLeft: '20px', paddingRight: '20px', paddingBottom: '4px',
           }}
         >
           {CATEGORIES.map((cat) => {
@@ -77,17 +73,19 @@ export default function HomePage({ isFavorite, onToggleFavorite }) {
                 onClick={() => setActiveCategory(isActive ? null : cat.label)}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '6px',
-                  padding: '8px 16px', borderRadius: '999px',
+                  padding: '8px 18px', borderRadius: '999px',
                   fontSize: '14px', fontWeight: '600',
                   whiteSpace: 'nowrap', flexShrink: 0,
                   cursor: 'pointer', border: 'none',
                   transition: 'all 0.2s',
-                  background: isActive ? '#00513f' : '#f1f5f9',
-                  color: isActive ? '#ffffff' : '#475569',
-                  boxShadow: isActive ? '0 2px 8px rgba(0,81,63,0.35)' : 'none',
+                  background: isActive ? '#00513f' : '#ffffff',
+                  color: isActive ? '#ffffff' : '#374151',
+                  boxShadow: isActive
+                    ? '0 2px 8px rgba(0,81,63,0.30)'
+                    : '0 1px 4px rgba(0,0,0,0.10)',
                 }}
               >
-                <span style={{ fontSize: '16px' }}>{cat.icon}</span>
+                <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>{cat.icon}</span>
                 {cat.label}
               </button>
             );
@@ -95,17 +93,15 @@ export default function HomePage({ isFavorite, onToggleFavorite }) {
         </div>
       </div>
 
-      {/* Featured for You */}
-      <div style={{ padding: `0 ${PAD}` }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '16px' }}>
-          <h2 className="font-heading font-bold text-surface-900 dark:text-surface-100"
-              style={{ fontSize: '24px', lineHeight: '1.2' }}>
+      {/* Featured Section */}
+      <div style={{ padding: '0 20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <h2 style={{ fontSize: '22px', fontWeight: '700', color: '#111827', fontFamily: 'Epilogue, sans-serif' }}>
             {sectionTitle}
           </h2>
           <Link
             to="/explore"
-            className="text-primary-600 dark:text-primary-400 hover:underline"
-            style={{ fontSize: '14px', fontWeight: '600', marginBottom: '2px' }}
+            style={{ fontSize: '14px', fontWeight: '600', color: '#00513f', textDecoration: 'none' }}
           >
             See all
           </Link>
@@ -114,9 +110,9 @@ export default function HomePage({ isFavorite, onToggleFavorite }) {
         {loading ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {[1, 2, 3].map((i) => (
-              <div key={i} className="rounded-xl overflow-hidden shadow-md">
-                <div className="skeleton" style={{ aspectRatio: '3/2' }} />
-                <div className="bg-white dark:bg-surface-900 p-4 space-y-2">
+              <div key={i} className="rounded-xl overflow-hidden shadow-sm border border-surface-100">
+                <div className="skeleton" style={{ aspectRatio: '16/9' }} />
+                <div style={{ padding: '16px' }} className="space-y-2">
                   <div className="skeleton h-5 w-3/4 rounded" />
                   <div className="skeleton h-4 w-1/3 rounded" />
                   <div className="skeleton h-4 w-full rounded" />
@@ -126,7 +122,7 @@ export default function HomePage({ isFavorite, onToggleFavorite }) {
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {featured.map((attraction, i) => (
+            {displayed.map((attraction, i) => (
               <AttractionCard
                 key={attraction.id}
                 attraction={attraction}
@@ -141,46 +137,47 @@ export default function HomePage({ isFavorite, onToggleFavorite }) {
       </div>
 
       {/* Travel Essential Banner */}
-      <div style={{ padding: `32px ${PAD} 16px` }}>
+      <div style={{ padding: '32px 20px 8px' }}>
         <div style={{
-          background: '#fd9d1a', borderRadius: '16px',
-          padding: '24px', position: 'relative', overflow: 'hidden',
+          background: '#fd9d1a', borderRadius: '20px',
+          padding: '28px 24px', position: 'relative', overflow: 'hidden',
         }}>
           {/* Decorative circles */}
           <div style={{
-            position: 'absolute', bottom: '-32px', right: '-32px',
+            position: 'absolute', bottom: '-40px', right: '-40px',
             width: '160px', height: '160px', borderRadius: '50%',
             background: 'rgba(255,255,255,0.10)',
           }} />
           <div style={{
-            position: 'absolute', bottom: '32px', right: '32px',
+            position: 'absolute', bottom: '30px', right: '30px',
             width: '80px', height: '80px', borderRadius: '50%',
             background: 'rgba(255,255,255,0.10)',
           }} />
 
           <div style={{ position: 'relative', zIndex: 1 }}>
             <span style={{
-              display: 'inline-block', background: 'rgba(255,255,255,0.22)',
+              display: 'inline-block', background: 'rgba(255,255,255,0.25)',
               color: '#451a03', fontSize: '11px', fontWeight: '700',
-              textTransform: 'uppercase', letterSpacing: '0.1em',
+              textTransform: 'uppercase', letterSpacing: '0.08em',
               padding: '4px 12px', borderRadius: '999px', marginBottom: '12px',
             }}>
               Travel Essential
             </span>
-            <h2 className="font-heading" style={{
+            <h2 style={{
               fontSize: '22px', fontWeight: '700', color: '#1c0a00',
-              marginBottom: '8px', lineHeight: '1.3',
+              marginBottom: '10px', lineHeight: '1.3',
+              fontFamily: 'Epilogue, sans-serif',
             }}>
               Safety First in Sri Lanka
             </h2>
-            <p style={{ color: '#78350f', fontSize: '14px', lineHeight: '1.6', marginBottom: '16px', maxWidth: '280px' }}>
+            <p style={{ color: '#78350f', fontSize: '14px', lineHeight: '1.6', marginBottom: '20px', maxWidth: '260px' }}>
               Get the latest travel advisories, currency tips, and emergency contact information for your worry-free journey.
             </p>
             <button
               type="button"
               style={{
                 background: '#00513f', color: '#fff',
-                padding: '10px 24px', borderRadius: '999px',
+                padding: '12px 28px', borderRadius: '999px',
                 fontSize: '14px', fontWeight: '600', border: 'none', cursor: 'pointer',
               }}
             >
@@ -190,15 +187,32 @@ export default function HomePage({ isFavorite, onToggleFavorite }) {
 
           {/* Shield icon */}
           <div style={{
-            position: 'absolute', bottom: '16px', right: '24px',
+            position: 'absolute', bottom: '20px', right: '24px',
             color: 'rgba(28,10,0,0.12)', pointerEvents: 'none',
           }}>
-            <svg width="80" height="80" viewBox="0 0 24 24" fill="currentColor">
+            <svg width="90" height="90" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
             </svg>
           </div>
         </div>
       </div>
+
+      {/* Floating Map FAB */}
+      <button
+        type="button"
+        onClick={() => window.open('https://www.google.com/maps/search/attractions+sri+lanka', '_blank')}
+        style={{
+          position: 'fixed', bottom: '88px', right: '20px', zIndex: 50,
+          width: '56px', height: '56px',
+          background: '#00513f', color: '#fff',
+          borderRadius: '16px', border: 'none',
+          boxShadow: '0 4px 16px rgba(0,81,63,0.40)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: 'pointer', transition: 'transform 0.2s',
+        }}
+      >
+        <span className="material-symbols-outlined" style={{ fontSize: '26px' }}>map</span>
+      </button>
 
     </div>
   );

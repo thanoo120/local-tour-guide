@@ -35,13 +35,14 @@ export default function FavoritesPage({ favorites, isFavorite, onToggleFavorite,
       </div>
 
       {loading ? (
-        <div className="px-4 grid grid-cols-1 gap-4">
+        <div style={{ padding: '0 20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
           {[1, 2].map((i) => (
-            <div key={i} className="rounded-2xl overflow-hidden">
-              <div className="skeleton h-44 w-full" />
-              <div className="bg-white dark:bg-surface-900 p-4 space-y-2">
-                <div className="skeleton h-4 w-24 rounded-full" />
+            <div key={i} className="rounded-xl overflow-hidden shadow-sm border border-surface-100">
+              <div className="skeleton" style={{ aspectRatio: '16/9' }} />
+              <div style={{ padding: '16px' }} className="space-y-2">
                 <div className="skeleton h-5 w-3/4 rounded" />
+                <div className="skeleton h-4 w-1/3 rounded" />
+                <div className="skeleton h-4 w-full rounded" />
               </div>
             </div>
           ))}
@@ -69,7 +70,7 @@ export default function FavoritesPage({ favorites, isFavorite, onToggleFavorite,
           </Link>
         </div>
       ) : (
-        <div className="px-4 grid grid-cols-1 gap-4 pb-4">
+        <div style={{ padding: '0 20px 20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
           {favoriteAttractions.map((attraction, i) => (
             <AttractionCard
               key={attraction.id}
