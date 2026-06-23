@@ -13,64 +13,111 @@ export default function FavoritesPage({ favorites, isFavorite, onToggleFavorite,
 
   return (
     <div className="page-content">
-      {/* Header */}
-      <div className="px-4 pb-4 pt-safe flex items-center justify-between">
-        <div>
-          <h1 className="font-heading font-bold text-surface-900 dark:text-surface-100 text-2xl mb-1">
-            Favorites
-          </h1>
-          <p className="text-surface-500 dark:text-surface-400 text-sm">
-            {favoriteAttractions.length} saved place{favoriteAttractions.length !== 1 ? 's' : ''}
-          </p>
+      {/* Header banner */}
+      <div style={{ padding: '20px 20px 0' }}>
+        <div style={{
+          background: 'linear-gradient(135deg, #be185d 0%, #f43f5e 45%, #f97316 100%)',
+          borderRadius: '24px',
+          padding: '20px 20px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          boxShadow: '0 8px 28px rgba(244,63,94,0.3)',
+          position: 'relative', overflow: 'hidden',
+        }}>
+          {/* BG decoration */}
+          <div style={{
+            position: 'absolute', bottom: '-30px', right: '-30px',
+            width: '120px', height: '120px', borderRadius: '50%',
+            background: 'rgba(255,255,255,0.1)',
+          }} />
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', position: 'relative', zIndex: 1 }}>
+            <div style={{
+              width: '48px', height: '48px', borderRadius: '16px',
+              background: 'rgba(255,255,255,0.2)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="white" stroke="none">
+                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+              </svg>
+            </div>
+            <div>
+              <h1 style={{ color: '#fff', fontWeight: 800, fontSize: '22px', lineHeight: 1.2, margin: 0, fontFamily: 'Epilogue, sans-serif' }}>
+                My Favourites
+              </h1>
+              <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', margin: '2px 0 0' }}>
+                {favoriteAttractions.length} saved place{favoriteAttractions.length !== 1 ? 's' : ''}
+              </p>
+            </div>
+          </div>
+
+          {favoriteAttractions.length > 0 && (
+            <button
+              onClick={onClearFavorites}
+              type="button"
+              style={{
+                background: 'rgba(255,255,255,0.2)',
+                border: '1.5px solid rgba(255,255,255,0.35)',
+                borderRadius: '20px',
+                color: '#fff',
+                fontSize: '12px',
+                fontWeight: 700,
+                padding: '7px 14px',
+                cursor: 'pointer',
+                position: 'relative', zIndex: 1,
+              }}
+            >
+              Clear all
+            </button>
+          )}
         </div>
-        {favoriteAttractions.length > 0 && (
-          <button
-            onClick={onClearFavorites}
-            className="text-red-500 dark:text-red-400 text-sm font-medium hover:text-red-600 transition-colors"
-            type="button"
-          >
-            Clear all
-          </button>
-        )}
       </div>
 
       {loading ? (
-        <div style={{ padding: '0 20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div style={{ padding: '20px 20px 0', display: 'flex', flexDirection: 'column', gap: '16px' }}>
           {[1, 2].map((i) => (
-            <div key={i} className="rounded-xl overflow-hidden shadow-sm border border-surface-100">
+            <div key={i} style={{ borderRadius: '20px', overflow: 'hidden', background: '#fff', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
               <div className="skeleton" style={{ aspectRatio: '16/9' }} />
-              <div style={{ padding: '16px' }} className="space-y-2">
-                <div className="skeleton h-5 w-3/4 rounded" />
-                <div className="skeleton h-4 w-1/3 rounded" />
-                <div className="skeleton h-4 w-full rounded" />
+              <div style={{ padding: '16px' }}>
+                <div className="skeleton" style={{ height: '18px', width: '70%', borderRadius: '6px', marginBottom: '8px' }} />
+                <div className="skeleton" style={{ height: '14px', width: '40%', borderRadius: '6px' }} />
               </div>
             </div>
           ))}
         </div>
       ) : favoriteAttractions.length === 0 ? (
-        <div className="flex flex-col items-center justify-center px-8 py-20 text-center">
-          <div className="w-20 h-20 rounded-full bg-surface-100 dark:bg-surface-800 flex items-center justify-center mb-5">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 strokeWidth="1.5" className="text-surface-400">
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 32px', textAlign: 'center' }}>
+          <div style={{
+            width: '88px', height: '88px', borderRadius: '50%',
+            background: 'linear-gradient(135deg, #fce7f3, #ffe4e6)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            marginBottom: '20px',
+            boxShadow: '0 4px 20px rgba(244,63,94,0.15)',
+          }}>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" strokeWidth="1.5" strokeLinecap="round">
               <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
             </svg>
           </div>
-          <h3 className="font-heading font-semibold text-surface-700 dark:text-surface-300 text-xl mb-2">
+          <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#0f172a', marginBottom: '8px', fontFamily: 'Epilogue, sans-serif' }}>
             No favorites yet
           </h3>
-          <p className="text-surface-500 dark:text-surface-400 text-sm mb-6 leading-relaxed">
+          <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '28px', lineHeight: '1.6', maxWidth: '260px' }}>
             Tap the heart icon on any attraction to save it here for quick access.
           </p>
           <Link
             to="/explore"
-            className="bg-primary-600 text-white px-6 py-3 rounded-2xl font-semibold text-sm
-                       hover:bg-primary-700 active:scale-95 transition-all"
+            style={{
+              background: 'linear-gradient(135deg, #f43f5e, #f97316)',
+              color: '#fff', padding: '13px 28px', borderRadius: '999px',
+              fontWeight: '700', fontSize: '14px', textDecoration: 'none',
+              boxShadow: '0 6px 20px rgba(244,63,94,0.35)',
+            }}
           >
-            Explore Attractions
+            Explore Attractions →
           </Link>
         </div>
       ) : (
-        <div style={{ padding: '0 20px 20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div style={{ padding: '20px 20px 20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
           {favoriteAttractions.map((attraction, i) => (
             <AttractionCard
               key={attraction.id}

@@ -12,7 +12,7 @@ function ToggleSwitch({ on, onChange }) {
       role="switch"
       style={{
         width: '44px', height: '26px', borderRadius: '999px',
-        background: on ? '#00513f' : '#cbd5e1',
+        background: on ? 'linear-gradient(135deg, #7c3aed, #6d28d9)' : '#e2e8f0',
         border: 'none', cursor: 'pointer', padding: '3px',
         transition: 'background 0.2s',
         display: 'flex', alignItems: 'center',
@@ -685,9 +685,31 @@ function AboutSheet() {
 /* ─── Stats & Menu data ─────────────────────────────────── */
 
 const STATS = [
-  { label: 'Places Visited', value: '12', icon: '📍' },
-  { label: 'Favorites', value: null, icon: '❤️' },
-  { label: 'Reviews', value: '5', icon: '⭐' },
+  {
+    label: 'Places Visited', value: '12',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+        <circle cx="12" cy="10" r="3" fill="#f97316" stroke="none" />
+      </svg>
+    ),
+  },
+  {
+    label: 'Favorites', value: null,
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="#e11d48" stroke="#e11d48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+      </svg>
+    ),
+  },
+  {
+    label: 'Reviews', value: '5',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+      </svg>
+    ),
+  },
 ];
 
 function MenuItem({ item }) {
@@ -705,11 +727,11 @@ function MenuItem({ item }) {
       }}
     >
       <div style={{
-        width: '36px', height: '36px', borderRadius: '10px',
-        background: 'var(--color-surface-100)',
+        width: '38px', height: '38px', borderRadius: '12px',
+        background: 'linear-gradient(135deg, #ede9fe, #e0f2fe)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color: 'var(--color-surface-600)', flexShrink: 0,
-      }} className="dark:bg-surface-800 dark:text-surface-400">
+        color: '#7c3aed', flexShrink: 0,
+      }}>
         {item.icon}
       </div>
 
@@ -904,6 +926,13 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
     s.label === 'Favorites' ? { ...s, value: String(favoritesCount) } : s
   );
 
+  // Stats colors per item
+  const STAT_CONFIGS = [
+    { gradient: 'linear-gradient(135deg, #f97316, #ef4444)', shadow: 'rgba(249,115,22,0.25)' },
+    { gradient: 'linear-gradient(135deg, #f43f5e, #be185d)',  shadow: 'rgba(244,63,94,0.25)'  },
+    { gradient: 'linear-gradient(135deg, #f59e0b, #d97706)',  shadow: 'rgba(245,158,11,0.25)'  },
+  ];
+
   const MENU_SECTIONS = [
     {
       title: 'Preferences',
@@ -1033,19 +1062,39 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
   return (
     <div className="page-content">
 
+      {/* Hero gradient bar */}
+      <div style={{
+        background: 'linear-gradient(135deg, #1a0533 0%, #2d1b69 50%, #0d1b4a 100%)',
+        padding: '28px 20px 56px',
+        textAlign: 'center',
+        position: 'relative',
+      }}>
+        <div style={{
+          position: 'absolute', top: '-30px', right: '-30px',
+          width: '140px', height: '140px', borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(124,58,237,0.3) 0%, transparent 70%)',
+        }} />
+        <div style={{
+          position: 'absolute', bottom: '-20px', left: '-20px',
+          width: '100px', height: '100px', borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(6,182,212,0.2) 0%, transparent 70%)',
+        }} />
+      </div>
+
       {/* Avatar + name */}
-      <div style={{ padding: '24px 20px 20px', textAlign: 'center' }}>
+      <div style={{ padding: '0 20px 20px', textAlign: 'center', marginTop: '-48px', position: 'relative', zIndex: 2 }}>
         <label
           htmlFor="profile-photo-input"
           style={{ display: 'inline-block', cursor: 'pointer', position: 'relative', margin: '0 auto 14px' }}
           title="Change profile photo"
         >
           <div style={{
-            width: '88px', height: '88px', borderRadius: '50%',
-            background: profilePhoto ? 'transparent' : 'linear-gradient(135deg, #016b54, #2d9e80)',
+            width: '96px', height: '96px', borderRadius: '50%',
+            background: profilePhoto ? 'transparent' : 'linear-gradient(135deg, #7c3aed, #06b6d4)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 4px 20px rgba(1,107,84,0.35)',
+            boxShadow: '0 6px 24px rgba(124,58,237,0.4)',
             overflow: 'hidden',
+            border: '4px solid #f8f7ff',
           }}>
             {profilePhoto ? (
               <img
@@ -1055,17 +1104,17 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
               />
             ) : (
               <span style={{
-                fontFamily: 'var(--font-heading)', fontWeight: '700',
-                fontSize: '28px', color: '#fff', letterSpacing: '1px',
+                fontFamily: 'var(--font-heading)', fontWeight: '800',
+                fontSize: '32px', color: '#fff', letterSpacing: '1px',
               }}>{initials}</span>
             )}
           </div>
           {/* Camera overlay */}
           <div style={{
-            position: 'absolute', bottom: '0', right: '0',
-            width: '26px', height: '26px', borderRadius: '50%',
-            background: 'var(--color-primary-600)',
-            border: '2px solid var(--color-surface-50)',
+            position: 'absolute', bottom: '2px', right: '2px',
+            width: '28px', height: '28px', borderRadius: '50%',
+            background: 'linear-gradient(135deg, #f97316, #ef4444)',
+            border: '2.5px solid #f8f7ff',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
@@ -1083,11 +1132,10 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
           />
         </label>
 
-        <h2 className="font-heading font-bold text-surface-900 dark:text-surface-100"
-            style={{ fontSize: '22px', marginBottom: '4px' }}>
+        <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', marginBottom: '4px', fontFamily: 'Epilogue, sans-serif' }}>
           {displayName}
         </h2>
-        <p className="text-surface-500 dark:text-surface-400" style={{ fontSize: '14px', marginBottom: '16px' }}>
+        <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px' }}>
           {displayEmail}
         </p>
 
@@ -1096,9 +1144,11 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
           onClick={() => setSheet('editProfile')}
           style={{
             display: 'inline-flex', alignItems: 'center', gap: '6px',
-            background: 'var(--color-primary-600)', color: '#fff',
-            padding: '9px 22px', borderRadius: '999px',
-            fontSize: '14px', fontWeight: '600', border: 'none', cursor: 'pointer',
+            background: 'linear-gradient(135deg, #7c3aed, #6d28d9)',
+            color: '#fff',
+            padding: '10px 22px', borderRadius: '999px',
+            fontSize: '13px', fontWeight: '700', border: 'none', cursor: 'pointer',
+            boxShadow: '0 4px 14px rgba(124,58,237,0.35)',
           }}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -1112,46 +1162,65 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
 
       {/* Stats row */}
       <div style={{
-        display: 'flex', margin: '0 20px 24px',
-        background: 'var(--color-surface-100)', borderRadius: '16px',
-        overflow: 'hidden',
-      }} className="dark:bg-surface-800">
-        {stats.map((stat, i) => (
-          <div key={stat.label} style={{
-            flex: 1, padding: '16px 8px', textAlign: 'center',
-            borderRight: i < stats.length - 1 ? '1px solid var(--color-surface-200)' : 'none',
-          }} className={i < stats.length - 1 ? 'dark:border-r dark:border-surface-700' : ''}>
-            <div style={{ fontSize: '20px', marginBottom: '4px' }}>{stat.icon}</div>
-            <div className="font-heading font-bold text-surface-900 dark:text-surface-100"
-                 style={{ fontSize: '20px', lineHeight: '1' }}>
-              {stat.value}
+        display: 'flex', gap: '12px', margin: '0 20px 24px',
+      }}>
+        {stats.map((stat, i) => {
+          const cfg = STAT_CONFIGS[i] || STAT_CONFIGS[0];
+          return (
+            <div key={stat.label} style={{
+              flex: 1, padding: '14px 8px', textAlign: 'center',
+              background: '#fff', borderRadius: '16px',
+              boxShadow: `0 4px 16px ${cfg.shadow}`,
+              border: '1px solid rgba(0,0,0,0.04)',
+            }}>
+              <div style={{
+                width: '36px', height: '36px', borderRadius: '10px',
+                background: cfg.gradient,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                margin: '0 auto 6px',
+              }}>
+                {/* Recolor icon to white */}
+                {stat.label === 'Places Visited' && (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3" fill="white" stroke="none"/></svg>
+                )}
+                {stat.label === 'Favorites' && (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                )}
+                {stat.label === 'Reviews' && (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                )}
+              </div>
+              <div style={{ fontSize: '20px', fontWeight: '800', color: '#0f172a', lineHeight: '1', fontFamily: 'Epilogue, sans-serif' }}>
+                {stat.value}
+              </div>
+              <div style={{ fontSize: '10px', marginTop: '3px', color: '#94a3b8', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                {stat.label}
+              </div>
             </div>
-            <div className="text-surface-500 dark:text-surface-400"
-                 style={{ fontSize: '11px', marginTop: '3px', lineHeight: '1.3' }}>
-              {stat.label}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Menu sections */}
       {MENU_SECTIONS.map((section) => (
-        <div key={section.title} style={{ marginBottom: '8px' }}>
-          <p className="text-surface-400 dark:text-surface-500"
-             style={{ fontSize: '11px', fontWeight: '700', textTransform: 'uppercase',
-                      letterSpacing: '0.08em', padding: '0 20px 6px' }}>
+        <div key={section.title} style={{ marginBottom: '12px' }}>
+          <p style={{
+            fontSize: '11px', fontWeight: '800', textTransform: 'uppercase',
+            letterSpacing: '0.1em', padding: '0 20px 8px', color: '#94a3b8',
+          }}>
             {section.title}
           </p>
           <div style={{
-            margin: '0 20px', background: '#fff', borderRadius: '16px',
-            overflow: 'hidden', boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
-          }} className="dark:bg-surface-900">
+            margin: '0 20px', background: '#fff', borderRadius: '18px',
+            overflow: 'hidden',
+            boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+            border: '1px solid rgba(124,58,237,0.06)',
+          }}>
             {section.items.map((item, i) => (
               <div key={item.label}>
                 <MenuItem item={item} />
                 {i < section.items.length - 1 && (
-                  <div style={{ height: '1px', background: 'var(--color-surface-100)', margin: '0 20px' }}
-                       className="dark:bg-surface-800" />
+                  <div style={{ height: '1px', background: '#f1f5f9', margin: '0 16px' }} />
                 )}
               </div>
             ))}
@@ -1166,12 +1235,12 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
           onClick={onLogout}
           style={{
             width: '100%', padding: '14px',
-            background: '#fff1f2', color: '#e11d48',
-            borderRadius: '16px', border: 'none', cursor: 'pointer',
-            fontSize: '15px', fontWeight: '600',
+            background: '#fff1f2',
+            color: '#e11d48',
+            borderRadius: '16px', border: '1.5px solid #fecdd3', cursor: 'pointer',
+            fontSize: '14px', fontWeight: '700',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
           }}
-          className="dark:bg-red-950/30 dark:text-red-400"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" strokeWidth="2" strokeLinecap="round">
