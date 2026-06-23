@@ -1,122 +1,100 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useFavorites } from './hooks/useFavorites';
+import { useAuth } from './hooks/useAuth';
+import { useTheme } from './hooks/useTheme';
+import BottomNav from './components/BottomNav';
+import Header from './components/Header';
+import HomePage from './pages/HomePage';
+import ExplorePage from './pages/ExplorePage';
+import FavoritesPage from './pages/FavoritesPage';
+import AttractionDetailPage from './pages/AttractionDetailPage';
+import ProfilePage from './pages/ProfilePage';
+import LoginPage from './pages/LoginPage';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const { favorites, isFavorite, toggleFavorite, clearFavorites, favoritesCount } = useFavorites();
+  const { user, isLoggedIn, login, signup, logout, updateProfile, updateProfilePhoto } = useAuth();
+  const { theme, setTheme } = useTheme();
+
+  if (!isLoggedIn) {
+    return <LoginPage onLogin={login} onSignup={signup} />;
+  }
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      <Header user={user} theme={theme} onToggleTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')} />
+      <Routes>
+        <Route path="/" element={<Navigate to="/explore" replace />} />
+        <Route
+          path="/explore"
+          element={
+            <ExplorePage
+              isFavorite={isFavorite}
+              onToggleFavorite={toggleFavorite}
+            />
+          }
+        />
+        <Route
+          path="/favorites"
+          element={
+            <FavoritesPage
+              favorites={favorites}
+              isFavorite={isFavorite}
+              onToggleFavorite={toggleFavorite}
+              onClearFavorites={clearFavorites}
+            />
+          }
+        />
+        <Route
+          path="/attraction/:id"
+          element={
+            <AttractionDetailPage
+              isFavorite={isFavorite}
+              onToggleFavorite={toggleFavorite}
+            />
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProfilePage
+              user={user}
+              favoritesCount={favoritesCount}
+              onLogout={logout}
+              onUpdateProfile={updateProfile}
+              onUpdateProfilePhoto={updateProfilePhoto}
+              theme={theme}
+              onSetTheme={setTheme}
+            />
+          }
+        />
+        <Route
+          path="/bookings"
+          element={
+            <div className="page-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 32px', textAlign: 'center' }}>
+              <div style={{
+                width: '80px', height: '80px', borderRadius: '24px',
+                background: 'linear-gradient(135deg, #06b6d4, #0891b2)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                marginBottom: '20px',
+                boxShadow: '0 8px 24px rgba(6,182,212,0.3)',
+              }}>
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+              </div>
+              <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', marginBottom: '8px', fontFamily: 'Epilogue, sans-serif' }}>No Bookings Yet</h2>
+              <p style={{ fontSize: '14px', color: '#64748b', lineHeight: '1.6' }}>Your trip bookings will appear here once you plan your adventures.</p>
+            </div>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+      <BottomNav favoritesCount={favoritesCount} />
     </>
-  )
+  );
 }
-
-export default App
