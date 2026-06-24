@@ -677,9 +677,10 @@ export default function AttractionDetailPage({ isFavorite, onToggleFavorite }) {
             gap: "10px",
           }}
         >
-          {quickStats.map((s) => (
+          {quickStats.map((s, index) => (
             <div
               key={s.label}
+              className={`animate-fade-in-up stagger-${index + 1}`}
               style={{
                 padding: "14px 12px",
                 background: s.bg,
@@ -742,7 +743,7 @@ export default function AttractionDetailPage({ isFavorite, onToggleFavorite }) {
           ))}
         </div>
 
-        <div style={{ padding: "0 20px 24px", display: "flex", gap: "10px" }}>
+        <div className="animate-fade-in-up stagger-5" style={{ padding: "0 20px 24px", display: "flex", gap: "10px" }}>
           <a
             href={`https://www.google.com/maps/search/?api=1&query=${attraction.latitude},${attraction.longitude}`}
             target="_blank"
@@ -850,6 +851,7 @@ export default function AttractionDetailPage({ isFavorite, onToggleFavorite }) {
         </div>
 
         <div
+          className="animate-fade-in stagger-5"
           style={{
             margin: "0 20px 24px",
             display: "flex",
@@ -889,7 +891,7 @@ export default function AttractionDetailPage({ isFavorite, onToggleFavorite }) {
         </div>
 
      
-        <div style={{ padding: "0 20px 24px" }}>
+        <div className="animate-fade-in-up stagger-6" style={{ padding: "0 20px 24px" }}>
           <SectionHeader
             icon={
               <svg
@@ -966,7 +968,7 @@ export default function AttractionDetailPage({ isFavorite, onToggleFavorite }) {
 
       
         {attraction.quote && (
-          <div style={{ margin: "0 20px 24px" }}>
+          <div className="animate-fade-in-up stagger-7" style={{ margin: "0 20px 24px" }}>
             <div
               style={{
                 background: "linear-gradient(135deg, #1a0533, #2d1b69)",
@@ -1011,7 +1013,7 @@ export default function AttractionDetailPage({ isFavorite, onToggleFavorite }) {
 
       
         {attraction.images?.length > 1 && (
-          <div style={{ padding: "0 20px 24px" }}>
+          <div className="animate-fade-in-up stagger-7" style={{ padding: "0 20px 24px" }}>
             <SectionHeader
               icon={
                 <svg
@@ -1132,7 +1134,7 @@ export default function AttractionDetailPage({ isFavorite, onToggleFavorite }) {
 
        
         {attraction.proTip && (
-          <div style={{ margin: "0 20px 24px" }}>
+          <div className="animate-fade-in-up stagger-8" style={{ margin: "0 20px 24px" }}>
             <div
               style={{
                 background: "linear-gradient(135deg, #fef9c3, #fef3c7)",

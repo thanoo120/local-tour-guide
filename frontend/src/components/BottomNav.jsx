@@ -83,7 +83,7 @@ export default function BottomNav({ favoritesCount = 0 }) {
           >
             {({ isActive }) => (
               <div
-                className="flex flex-col items-center justify-center gap-0.5 transition-all duration-200"
+                className={`flex flex-col items-center justify-center gap-0.5 transition-all duration-200 ${isActive ? 'nav-item-active' : ''}`}
                 style={{
                   borderRadius: '14px',
                   padding: isActive ? '6px 14px' : '6px 12px',

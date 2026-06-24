@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import FavoriteButton from './FavoriteButton';
 import { calculateDistance, formatDistance } from '../utils/distance';
 
 const CATEGORY_GRADIENTS = {
@@ -80,28 +81,12 @@ export default function AttractionCard({ attraction, userPosition, isFavorite, o
         )}
 
        
-        <button
-          type="button"
-          aria-label="Toggle favourite"
-          onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleFavorite(attraction.id); }}
-          className="absolute top-2.5 right-2.5 z-10 flex items-center justify-center
-                     backdrop-blur-sm rounded-full shadow-lg transition-transform active:scale-90"
-          style={{
-            width: compact ? 30 : 38, height: compact ? 30 : 38,
-            background: isFavorite ? 'rgba(244,63,94,0.9)' : 'rgba(255,255,255,0.9)',
-          }}
-        >
-          <svg
-            width={compact ? 13 : 17}
-            height={compact ? 13 : 17}
-            viewBox="0 0 24 24"
-            fill={isFavorite ? '#fff' : 'none'}
-            stroke={isFavorite ? '#fff' : '#94a3b8'}
-            strokeWidth="2"
-          >
-            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
-          </svg>
-        </button>
+        <FavoriteButton
+          isFavorite={isFavorite}
+          onToggle={() => onToggleFavorite(attraction.id)}
+          size={compact ? 'sm' : 'md'}
+          className="absolute top-2.5 right-2.5 z-10"
+        />
 
        
         {distance !== null && (

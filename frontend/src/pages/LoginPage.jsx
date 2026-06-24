@@ -15,9 +15,9 @@ function EyeIcon({ show }) {
   );
 }
 
-function InputField({ label, type, value, onChange, placeholder, error, rightSlot }) {
+function InputField({ label, type, value, onChange, placeholder, error, rightSlot, className = '' }) {
   return (
-    <div style={{ marginBottom: '16px' }}>
+    <div style={{ marginBottom: '16px' }} className={className}>
       <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#64748b', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
         {label}
       </label>
@@ -147,25 +147,33 @@ export default function LoginPage({ onLogin, onSignup }) {
 
         
         {[...Array(6)].map((_, i) => (
-          <div key={i} style={{
-            position: 'absolute',
-            width: '6px', height: '6px', borderRadius: '50%',
-            background: ['#7c3aed','#06b6d4','#f97316','#f43f5e','#10b981','#fbbf24'][i],
-            opacity: 0.6,
-            top: `${[20,60,35,75,50,15][i]}%`,
-            left: `${[15,8,85,90,5,92][i]}%`,
-          }} />
+          <div key={i}
+            className="animate-float"
+            style={{
+              position: 'absolute',
+              width: '6px', height: '6px', borderRadius: '50%',
+              background: ['#7c3aed','#06b6d4','#f97316','#f43f5e','#10b981','#fbbf24'][i],
+              opacity: 0.6,
+              top: `${[20,60,35,75,50,15][i]}%`,
+              left: `${[15,8,85,90,5,92][i]}%`,
+              animationDelay: `${i * 0.4}s`,
+              animationDuration: `${3 + i * 0.5}s`,
+            }}
+          />
         ))}
       </div>
 
     
-      <div style={{
-        flex: 1, padding: '0 20px 32px',
-        marginTop: '-24px',
-        background: '#f8f7ff',
-        borderRadius: '28px 28px 0 0',
-        boxShadow: '0 -8px 40px rgba(0,0,0,0.08)',
-      }}>
+      <div
+        className="animate-fade-in-up stagger-1"
+        style={{
+          flex: 1, padding: '0 20px 32px',
+          marginTop: '-24px',
+          background: '#f8f7ff',
+          borderRadius: '28px 28px 0 0',
+          boxShadow: '0 -8px 40px rgba(0,0,0,0.08)',
+        }}
+      >
 
         
         <div style={{
@@ -214,6 +222,7 @@ export default function LoginPage({ onLogin, onSignup }) {
               value={loginForm.email}
               onChange={e => setLoginForm(f => ({ ...f, email: e.target.value }))}
               placeholder="you@example.com"
+              className="animate-fade-in-up stagger-2"
             />
             <InputField
               label="Password"
@@ -221,6 +230,7 @@ export default function LoginPage({ onLogin, onSignup }) {
               value={loginForm.password}
               onChange={e => setLoginForm(f => ({ ...f, password: e.target.value }))}
               placeholder="Your password"
+              className="animate-fade-in-up stagger-3"
               rightSlot={
                 <button type="button" onClick={() => setShowPass(v => !v)}
                         style={{ color: '#94a3b8', lineHeight: 0, background: 'none', border: 'none', cursor: 'pointer' }}>
@@ -229,7 +239,7 @@ export default function LoginPage({ onLogin, onSignup }) {
               }
             />
 
-            <div style={{ textAlign: 'right', marginTop: '-8px', marginBottom: '24px' }}>
+            <div style={{ textAlign: 'right', marginTop: '-8px', marginBottom: '24px' }} className="animate-fade-in-up stagger-4">
               <button type="button" style={{ fontSize: '13px', color: '#7c3aed', fontWeight: '600', background: 'none', border: 'none', cursor: 'pointer' }}>
                 Forgot password?
               </button>
@@ -238,6 +248,7 @@ export default function LoginPage({ onLogin, onSignup }) {
             <button
               type="submit"
               disabled={submitting}
+              className="animate-fade-in-up stagger-4"
               style={{
                 width: '100%', height: '54px', borderRadius: '16px',
                 background: submitting ? '#e2e8f0' : 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #06b6d4 100%)',
@@ -251,10 +262,13 @@ export default function LoginPage({ onLogin, onSignup }) {
               {submitting ? 'Signing in…' : 'Sign In →'}
             </button>
 
-            <div style={{
-              textAlign: 'center', marginTop: '20px', padding: '12px 16px',
-              background: '#f1f5f9', borderRadius: '12px',
-            }}>
+            <div
+              className="animate-fade-in-up stagger-5"
+              style={{
+                textAlign: 'center', marginTop: '20px', padding: '12px 16px',
+                background: '#f1f5f9', borderRadius: '12px',
+              }}
+            >
               <p style={{ fontSize: '12px', color: '#64748b', marginBottom: '4px', fontWeight: '600' }}>DEMO CREDENTIALS</p>
               <p style={{ fontSize: '13px', color: '#334155' }}>
                 <span style={{ color: '#7c3aed', fontWeight: '600' }}>demo@lankaguide.com</span>
@@ -272,6 +286,7 @@ export default function LoginPage({ onLogin, onSignup }) {
               onChange={e => setSignupForm(f => ({ ...f, name: e.target.value }))}
               placeholder="Your full name"
               error={signupErrors.name}
+              className="animate-fade-in-up stagger-2"
             />
             <InputField
               label="Email Address"
@@ -280,6 +295,7 @@ export default function LoginPage({ onLogin, onSignup }) {
               onChange={e => setSignupForm(f => ({ ...f, email: e.target.value }))}
               placeholder="you@example.com"
               error={signupErrors.email}
+              className="animate-fade-in-up stagger-3"
             />
             <InputField
               label="Password"
@@ -288,6 +304,7 @@ export default function LoginPage({ onLogin, onSignup }) {
               onChange={e => setSignupForm(f => ({ ...f, password: e.target.value }))}
               placeholder="Min. 6 characters"
               error={signupErrors.password}
+              className="animate-fade-in-up stagger-4"
               rightSlot={
                 <button type="button" onClick={() => setShowPass(v => !v)}
                         style={{ color: '#94a3b8', lineHeight: 0, background: 'none', border: 'none', cursor: 'pointer' }}>
@@ -302,6 +319,7 @@ export default function LoginPage({ onLogin, onSignup }) {
               onChange={e => setSignupForm(f => ({ ...f, confirm: e.target.value }))}
               placeholder="Repeat password"
               error={signupErrors.confirm}
+              className="animate-fade-in-up stagger-5"
               rightSlot={
                 <button type="button" onClick={() => setShowConfirm(v => !v)}
                         style={{ color: '#94a3b8', lineHeight: 0, background: 'none', border: 'none', cursor: 'pointer' }}>
@@ -313,6 +331,7 @@ export default function LoginPage({ onLogin, onSignup }) {
             <button
               type="submit"
               disabled={submitting}
+              className="animate-fade-in-up stagger-6"
               style={{
                 width: '100%', height: '54px', borderRadius: '16px', marginTop: '4px',
                 background: submitting ? '#e2e8f0' : 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 50%, #06b6d4 100%)',
