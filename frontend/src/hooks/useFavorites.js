@@ -16,7 +16,6 @@ export function useFavorites() {
     }
   });
 
-  // Sync to localStorage whenever favorites change
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));

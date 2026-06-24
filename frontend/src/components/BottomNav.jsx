@@ -62,7 +62,7 @@ const NAV_ITEMS = [
 export default function BottomNav({ favoritesCount = 0 }) {
   return (
     <nav
-      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50"
+      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-107.5 z-50"
       style={{
         background: 'rgba(255,255,255,0.95)',
         backdropFilter: 'blur(20px)',
@@ -83,7 +83,7 @@ export default function BottomNav({ favoritesCount = 0 }) {
           >
             {({ isActive }) => (
               <div
-                className="flex flex-col items-center justify-center gap-0.5 transition-all duration-200"
+                className={`flex flex-col items-center justify-center gap-0.5 transition-all duration-200 ${isActive ? 'nav-item-active' : ''}`}
                 style={{
                   borderRadius: '14px',
                   padding: isActive ? '6px 14px' : '6px 12px',

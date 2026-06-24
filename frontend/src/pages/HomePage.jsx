@@ -25,7 +25,6 @@ export default function HomePage({ isFavorite, onToggleFavorite }) {
   return (
     <div className="page-content" style={{ paddingBottom: '120px' }}>
 
-      {/* Search */}
       <div style={{ padding: '16px 20px 20px' }}>
         <div style={{ position: 'relative' }}>
           <span
@@ -57,7 +56,6 @@ export default function HomePage({ isFavorite, onToggleFavorite }) {
         </div>
       </div>
 
-      {/* Category Chips */}
       <div style={{ marginBottom: '28px' }}>
         <div
           ref={chipScrollRef}
@@ -144,7 +142,7 @@ export default function HomePage({ isFavorite, onToggleFavorite }) {
         )}
       </div>
 
-      {/* Travel Essential Banner */}
+      
       <div style={{ padding: '32px 20px 8px' }}>
         <div style={{
           background: 'linear-gradient(135deg, #7c3aed 0%, #4338ca 40%, #06b6d4 100%)',
@@ -152,7 +150,7 @@ export default function HomePage({ isFavorite, onToggleFavorite }) {
           padding: '28px 24px', position: 'relative', overflow: 'hidden',
           boxShadow: '0 8px 32px rgba(124,58,237,0.35)',
         }}>
-          {/* Decorative circles */}
+          
           <div style={{
             position: 'absolute', bottom: '-50px', right: '-50px',
             width: '180px', height: '180px', borderRadius: '50%',
@@ -208,7 +206,7 @@ export default function HomePage({ isFavorite, onToggleFavorite }) {
         </div>
       </div>
 
-      {/* Floating Map FAB */}
+      
       <button
         type="button"
         onClick={() => window.open('https://www.google.com/maps/search/attractions+sri+lanka', '_blank')}

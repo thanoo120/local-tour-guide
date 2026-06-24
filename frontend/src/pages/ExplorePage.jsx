@@ -53,7 +53,7 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
   return (
     <div className="page-content" style={{ paddingBottom: '120px' }}>
 
-      {/* Location Section */}
+      
       <div style={{ padding: '14px 20px 0' }}>
         <div style={{
           background: '#fff',
@@ -63,7 +63,7 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
           marginBottom: '14px',
           border: '1px solid rgba(124,58,237,0.08)',
         }}>
-          {/* Row 1: status indicator + GPS button */}
+        
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
             {/* Left: icon + label + status pill */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, minWidth: 0 }}>
@@ -79,7 +79,7 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
                 transition: 'background 0.3s',
               }}>
                 {gpsLoading ? (
-                  /* spinning ring */
+                
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5"
                        style={{ animation: 'spin 1s linear infinite' }}>
                     <circle cx="12" cy="12" r="9" strokeDasharray="28 56" strokeLinecap="round"/>
@@ -121,7 +121,7 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
               </div>
             </div>
 
-            {/* GPS button */}
+          
             <button
               type="button"
               onClick={requestPosition}
@@ -172,7 +172,7 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
             </button>
           </div>
 
-          {/* Error banner */}
+        
           {gpsError && permissionStatus === 'denied' && (
             <div style={{
               display: 'flex', alignItems: 'flex-start', gap: '8px',
@@ -199,7 +199,6 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
             </div>
           )}
 
-          {/* GPS success row — show real coordinates */}
           {permissionStatus === 'granted' && !isUsingDefault && position?.latitude && (
             <div style={{
               display: 'flex', alignItems: 'center', gap: '8px',
@@ -220,7 +219,6 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
             </div>
           )}
 
-          {/* Landmark selector — shown when GPS not active */}
           {(isUsingDefault || permissionStatus !== 'granted') && (
             <div style={{
               display: 'flex', alignItems: 'center', gap: '8px',
@@ -247,7 +245,7 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
             </div>
           )}
 
-          {/* Coordinates row */}
+       
           <div style={{ display: 'flex', gap: '16px', marginTop: '8px', paddingLeft: '2px' }}>
             {permissionStatus === 'granted' && !isUsingDefault ? (
               <>
@@ -275,7 +273,6 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
           </div>
         </div>
 
-        {/* Tab Switcher */}
         <div style={{
           display: 'flex', gap: '4px',
           background: '#ede9fe', borderRadius: '14px', padding: '4px',
@@ -305,7 +302,7 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
         </div>
       </div>
 
-      {/* Map Tab */}
+     
       {activeTab === 'map' && (
         <div style={{ padding: '0 20px' }}>
           <div style={{
@@ -349,7 +346,6 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
         </div>
       )}
 
-      {/* Grid Tab */}
       {activeTab === 'grid' && (
         <>
           {/* Search + Favorites */}
@@ -402,7 +398,7 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
             </Link>
           </div>
 
-          {/* Category Filter */}
+         
           <div style={{ padding: '0 20px 20px' }}>
             <div
               ref={chipScrollRef}
@@ -436,7 +432,6 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
             </div>
           </div>
 
-          {/* Section header */}
           <div style={{ padding: '0 20px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h2 style={{
               fontSize: '18px', fontWeight: '800', fontFamily: 'Epilogue, sans-serif',
@@ -454,8 +449,6 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
               </span>
             )}
           </div>
-
-          {/* Cards */}
           <div style={{ padding: '0 20px' }}>
             {loading ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-/* ─── Shared primitives ─────────────────────────────────── */
 
 function ToggleSwitch({ on, onChange }) {
   return (
@@ -58,7 +57,6 @@ function InputField({ label, value, onChange, placeholder, error, type = 'text' 
   );
 }
 
-/* ─── Bottom Sheet ──────────────────────────────────────── */
 
 function Sheet({ title, onClose, children }) {
   return (

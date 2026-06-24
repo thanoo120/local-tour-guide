@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import FavoriteButton from './FavoriteButton';
 import { calculateDistance, formatDistance } from '../utils/distance';
 
 const CATEGORY_GRADIENTS = {
@@ -43,7 +44,7 @@ export default function AttractionCard({ attraction, userPosition, isFavorite, o
         border: '1px solid rgba(124,58,237,0.06)',
       }}
     >
-      {/* Image */}
+     
       <div
         className="relative w-full overflow-hidden"
         style={{
@@ -58,13 +59,13 @@ export default function AttractionCard({ attraction, userPosition, isFavorite, o
           onError={(e) => { e.currentTarget.style.display = 'none'; }}
         />
 
-        {/* Gradient overlay for readability */}
+       
         <div style={{
           position: 'absolute', inset: 0,
           background: 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 50%)',
         }} />
 
-        {/* Category badge */}
+       
         {!compact && (
           <div style={{
             position: 'absolute', top: 10, left: 10,
@@ -79,31 +80,15 @@ export default function AttractionCard({ attraction, userPosition, isFavorite, o
           </div>
         )}
 
-        {/* Favourite button */}
-        <button
-          type="button"
-          aria-label="Toggle favourite"
-          onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleFavorite(attraction.id); }}
-          className="absolute top-2.5 right-2.5 z-10 flex items-center justify-center
-                     backdrop-blur-sm rounded-full shadow-lg transition-transform active:scale-90"
-          style={{
-            width: compact ? 30 : 38, height: compact ? 30 : 38,
-            background: isFavorite ? 'rgba(244,63,94,0.9)' : 'rgba(255,255,255,0.9)',
-          }}
-        >
-          <svg
-            width={compact ? 13 : 17}
-            height={compact ? 13 : 17}
-            viewBox="0 0 24 24"
-            fill={isFavorite ? '#fff' : 'none'}
-            stroke={isFavorite ? '#fff' : '#94a3b8'}
-            strokeWidth="2"
-          >
-            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
-          </svg>
-        </button>
+       
+        <FavoriteButton
+          isFavorite={isFavorite}
+          onToggle={() => onToggleFavorite(attraction.id)}
+          size={compact ? 'sm' : 'md'}
+          className="absolute top-2.5 right-2.5 z-10"
+        />
 
-        {/* Distance badge */}
+       
         {distance !== null && (
           <div
             className="absolute flex items-center gap-1 text-white rounded-full font-semibold"
@@ -123,9 +108,8 @@ export default function AttractionCard({ attraction, userPosition, isFavorite, o
         )}
       </div>
 
-      {/* Content */}
+     
       <div style={{ padding: compact ? '10px 12px' : '14px 16px' }}>
-        {/* Title + rating */}
         <div className="flex items-start justify-between gap-2 mb-1">
           <h3
             className="font-heading font-bold leading-snug flex-1 line-clamp-2"
@@ -146,7 +130,6 @@ export default function AttractionCard({ attraction, userPosition, isFavorite, o
           </div>
         </div>
 
-        {/* Location */}
         {locationLabel && (
           <div className="flex items-center gap-1 mb-2" style={{ color: '#64748b', fontSize: compact ? 11 : 12 }}>
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2.5" className="shrink-0">
@@ -157,7 +140,6 @@ export default function AttractionCard({ attraction, userPosition, isFavorite, o
           </div>
         )}
 
-        {/* Short description */}
         {!compact && (attraction.shortDescription || attraction.description) && (
           <p
             className="line-clamp-2"

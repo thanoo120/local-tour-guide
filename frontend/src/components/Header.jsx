@@ -50,7 +50,7 @@ export default function Header({ user, theme, onToggleTheme }) {
         boxShadow: '0 2px 20px rgba(124,58,237,0.35)',
       }}
     >
-      {/* Logo + Brand */}
+      
       <div className="flex items-center gap-2.5">
         <div
           className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
@@ -80,9 +80,9 @@ export default function Header({ user, theme, onToggleTheme }) {
         </div>
       </div>
 
-      {/* Right side */}
+    
       <div className="flex items-center gap-2">
-        {/* Theme toggle */}
+      
         <button
           type="button"
           onClick={handleToggle}
@@ -101,7 +101,7 @@ export default function Header({ user, theme, onToggleTheme }) {
           {isDark ? <SunIcon /> : <MoonIcon />}
         </button>
 
-        {/* User pill */}
+       
         <NavLink
           to="/profile"
           aria-label="Profile"

@@ -10,9 +10,7 @@
   vertical-align: middle;
 }
 
-/* ============================================
-   DESIGN TOKENS & CSS CUSTOM PROPERTIES
-   ============================================ */
+
 @theme {
   /* Vivid Violet primary */
   --color-primary-50:  #f5f3ff;
@@ -93,6 +91,7 @@ html {
   font-size: 16px;
   -webkit-tap-highlight-color: transparent;
   -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   scroll-behavior: smooth;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
@@ -302,8 +301,8 @@ input, select, textarea {
 /* Glass morphism utility */
 .glass {
   background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
 }
 
 .dark .glass {
@@ -315,12 +314,34 @@ input, select, textarea {
 .pt-safe { padding-top: max(1.5rem, calc(env(safe-area-inset-top, 0px) + 0.5rem)); }
 .pt-safe-hero { padding-top: max(3rem, calc(env(safe-area-inset-top, 0px) + 1rem)); }
 
+@keyframes pageTransition {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes navItemBounce {
+  0% { transform: scale(0.9); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+.nav-item-active {
+  animation: navItemBounce 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
 /* Page content wrapper */
 .page-content {
   flex: 1;
   padding-top: 64px;
   padding-bottom: 88px;
   overflow-y: auto;
+  animation: pageTransition 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Hide scrollbar */
@@ -330,8 +351,8 @@ input, select, textarea {
 /* Glass card */
 .glass-card {
   background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }
 
 .dark .glass-card {
@@ -352,4 +373,10 @@ input, select, textarea {
 }
 .card-lift:active {
   transform: scale(0.98);
+}
+@media (hover: hover) {
+  .card-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12), 0 4px 10px rgba(0, 0, 0, 0.06);
+  }
 }
