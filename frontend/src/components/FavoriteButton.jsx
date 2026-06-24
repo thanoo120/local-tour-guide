@@ -1,9 +1,4 @@
 import { useState } from 'react';
-
-/**
- * Animated heart-shaped favorite toggle button.
- * Minimum 48x48px touch target for mobile accessibility.
- */
 export default function FavoriteButton({ isFavorite, onToggle, size = 'md', className = '' }) {
   const [animating, setAnimating] = useState(false);
 

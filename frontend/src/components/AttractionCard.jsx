@@ -43,7 +43,7 @@ export default function AttractionCard({ attraction, userPosition, isFavorite, o
         border: '1px solid rgba(124,58,237,0.06)',
       }}
     >
-      {/* Image */}
+     
       <div
         className="relative w-full overflow-hidden"
         style={{
@@ -58,13 +58,13 @@ export default function AttractionCard({ attraction, userPosition, isFavorite, o
           onError={(e) => { e.currentTarget.style.display = 'none'; }}
         />
 
-        {/* Gradient overlay for readability */}
+       
         <div style={{
           position: 'absolute', inset: 0,
           background: 'linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 50%)',
         }} />
 
-        {/* Category badge */}
+       
         {!compact && (
           <div style={{
             position: 'absolute', top: 10, left: 10,
@@ -79,7 +79,7 @@ export default function AttractionCard({ attraction, userPosition, isFavorite, o
           </div>
         )}
 
-        {/* Favourite button */}
+       
         <button
           type="button"
           aria-label="Toggle favourite"
@@ -103,7 +103,7 @@ export default function AttractionCard({ attraction, userPosition, isFavorite, o
           </svg>
         </button>
 
-        {/* Distance badge */}
+       
         {distance !== null && (
           <div
             className="absolute flex items-center gap-1 text-white rounded-full font-semibold"
@@ -123,9 +123,8 @@ export default function AttractionCard({ attraction, userPosition, isFavorite, o
         )}
       </div>
 
-      {/* Content */}
+     
       <div style={{ padding: compact ? '10px 12px' : '14px 16px' }}>
-        {/* Title + rating */}
         <div className="flex items-start justify-between gap-2 mb-1">
           <h3
             className="font-heading font-bold leading-snug flex-1 line-clamp-2"
@@ -146,7 +145,6 @@ export default function AttractionCard({ attraction, userPosition, isFavorite, o
           </div>
         </div>
 
-        {/* Location */}
         {locationLabel && (
           <div className="flex items-center gap-1 mb-2" style={{ color: '#64748b', fontSize: compact ? 11 : 12 }}>
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2.5" className="shrink-0">
@@ -157,7 +155,6 @@ export default function AttractionCard({ attraction, userPosition, isFavorite, o
           </div>
         )}
 
-        {/* Short description */}
         {!compact && (attraction.shortDescription || attraction.description) && (
           <p
             className="line-clamp-2"

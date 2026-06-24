@@ -7,7 +7,7 @@
  * @returns {number} Distance in kilometers, rounded to 1 decimal place
  */
 export function calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // Earth's radius in kilometers
+  const R = 6371; 
   const dLat = toRadians(lat2 - lat1);
   const dLon = toRadians(lon2 - lon1);
 

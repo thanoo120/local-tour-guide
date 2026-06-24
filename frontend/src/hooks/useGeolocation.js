@@ -1,10 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
-/**
- * Custom hook for accessing the HTML5 Geolocation API.
- * Caches the last known position in localStorage.
- * Falls back to Colombo, Sri Lanka (6.9271, 79.8612) if permission denied.
- */
+
 export function useGeolocation() {
   const STORAGE_KEY = 'ceylon_wanderer_geolocation';
   const DEFAULT_POSITION = { latitude: 6.9271, longitude: 79.8612 }; // Colombo
@@ -14,7 +10,7 @@ export function useGeolocation() {
       const cached = localStorage.getItem(STORAGE_KEY);
       if (cached) return JSON.parse(cached);
     } catch (e) {
-      // Ignore parse errors
+     
     }
     return null;
   };
@@ -36,7 +32,7 @@ export function useGeolocation() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(pos));
     } catch (e) {
-      // Storage full — ignore
+      
     }
   }, []);
 
@@ -60,17 +56,17 @@ export function useGeolocation() {
         setError(err.message);
         setPermissionStatus('denied');
         setLoading(false);
-        // Keep using cached or default position
+        
       },
       {
         enableHighAccuracy: false,
         timeout: 10000,
-        maximumAge: 300000, // 5 minutes cache
+        maximumAge: 300000, 
       }
     );
   }, [updatePosition]);
 
-  // Check permission status on mount
+  
   useEffect(() => {
     if (navigator.permissions) {
       navigator.permissions.query({ name: 'geolocation' }).then((result) => {
@@ -82,7 +78,7 @@ export function useGeolocation() {
           setPermissionStatus(result.state);
         };
       }).catch(() => {
-        // Permissions API not fully supported
+       
       });
     }
   }, [requestPosition]);

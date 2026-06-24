@@ -2,10 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 
 const API_BASE = 'http://localhost:3001';
 
-/**
- * Custom hook for fetching attractions from the mock REST API.
- * Falls back to a local data import if the API is unavailable.
- */
 export function useAttractions() {
   const [attractions, setAttractions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,7 +24,6 @@ export function useAttractions() {
       console.warn('API fetch failed, loading fallback data:', err.message);
       setError(err.message);
 
-      // Fallback: load from local data
       try {
         const { fallbackAttractions } = await import('../data/attractions.js');
         setAttractions(fallbackAttractions);

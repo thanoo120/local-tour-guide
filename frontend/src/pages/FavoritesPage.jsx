@@ -23,7 +23,6 @@ export default function FavoritesPage({ favorites, isFavorite, onToggleFavorite,
           boxShadow: '0 8px 28px rgba(244,63,94,0.3)',
           position: 'relative', overflow: 'hidden',
         }}>
-          {/* BG decoration */}
           <div style={{
             position: 'absolute', bottom: '-30px', right: '-30px',
             width: '120px', height: '120px', borderRadius: '50%',

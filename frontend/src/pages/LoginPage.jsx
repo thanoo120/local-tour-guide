@@ -94,14 +94,14 @@ export default function LoginPage({ onLogin, onSignup }) {
   return (
     <div style={{ minHeight: '100dvh', display: 'flex', flexDirection: 'column', background: '#f8f7ff' }}>
 
-      {/* Hero */}
+     
       <div style={{
         background: 'linear-gradient(160deg, #1a0533 0%, #2d1b69 40%, #0d1b4a 70%, #03254e 100%)',
         padding: '52px 28px 64px',
         textAlign: 'center',
         position: 'relative', overflow: 'hidden',
       }}>
-        {/* Decorative orbs */}
+        
         <div style={{
           position: 'absolute', top: '-50px', right: '-50px',
           width: '200px', height: '200px', borderRadius: '50%',
@@ -118,7 +118,7 @@ export default function LoginPage({ onLogin, onSignup }) {
           background: 'radial-gradient(circle, rgba(249,115,22,0.2) 0%, transparent 70%)',
         }} />
 
-        {/* Logo */}
+        
         <div style={{
           width: '72px', height: '72px', borderRadius: '22px',
           background: 'linear-gradient(135deg, #7c3aed, #06b6d4)',
@@ -145,7 +145,7 @@ export default function LoginPage({ onLogin, onSignup }) {
           Discover the beauty of Sri Lanka
         </p>
 
-        {/* Floating dots decoration */}
+        
         {[...Array(6)].map((_, i) => (
           <div key={i} style={{
             position: 'absolute',
@@ -158,7 +158,7 @@ export default function LoginPage({ onLogin, onSignup }) {
         ))}
       </div>
 
-      {/* Card */}
+    
       <div style={{
         flex: 1, padding: '0 20px 32px',
         marginTop: '-24px',
@@ -167,7 +167,7 @@ export default function LoginPage({ onLogin, onSignup }) {
         boxShadow: '0 -8px 40px rgba(0,0,0,0.08)',
       }}>
 
-        {/* Tabs */}
+        
         <div style={{
           display: 'flex',
           background: '#ede9fe',

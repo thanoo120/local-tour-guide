@@ -10,9 +10,7 @@
   vertical-align: middle;
 }
 
-/* ============================================
-   DESIGN TOKENS & CSS CUSTOM PROPERTIES
-   ============================================ */
+
 @theme {
   /* Vivid Violet primary */
   --color-primary-50:  #f5f3ff;
@@ -93,6 +91,7 @@ html {
   font-size: 16px;
   -webkit-tap-highlight-color: transparent;
   -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   scroll-behavior: smooth;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
@@ -302,8 +301,8 @@ input, select, textarea {
 /* Glass morphism utility */
 .glass {
   background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
 }
 
 .dark .glass {
@@ -330,8 +329,8 @@ input, select, textarea {
 /* Glass card */
 .glass-card {
   background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }
 
 .dark .glass-card {

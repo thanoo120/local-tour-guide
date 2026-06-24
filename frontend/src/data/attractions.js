@@ -1,7 +1,4 @@
-/**
- * Fallback attraction data used when the mock REST API (json-server) is unavailable.
- * This is identical to the data in db.json.
- */
+
 export const fallbackAttractions = [
   {
     id: 1,
