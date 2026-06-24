@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 export function useTheme() {
   const [theme, setThemeState] = useState(() => {
-    return localStorage.getItem('lanka_theme') ?? 'system';
+    return localStorage.getItem('lanka_theme') ?? 'light';
   });
 
   useEffect(() => {
