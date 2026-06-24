@@ -223,12 +223,14 @@ function LanguageSheet({ onClose }) {
             style={{
               width: '100%', padding: '14px 16px',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              background: active ? 'var(--color-primary-50)' : 'transparent',
-              border: `1.5px solid ${active ? 'var(--color-primary-200)' : 'var(--color-surface-100)'}`,
               borderRadius: '12px', cursor: 'pointer', marginBottom: '8px',
               transition: 'all 0.15s',
+              borderWidth: '1.5px',
+              borderStyle: 'solid',
             }}
-            className={active ? 'dark:bg-primary-950/30 dark:border-primary-800' : 'dark:border-surface-800'}
+            className={active 
+              ? 'bg-primary-50 dark:bg-primary-950/30 border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-400' 
+              : 'bg-transparent border-surface-100 dark:border-surface-800 text-surface-600 dark:text-surface-400'}
           >
             <div style={{ textAlign: 'left' }}>
               <div style={{ fontSize: '15px', fontWeight: '600' }}
@@ -334,11 +336,12 @@ function PrivacySheet({ onClose }) {
 
       <div style={{
         marginTop: '24px', padding: '14px 16px',
-        background: '#fff7ed', borderRadius: '12px',
-        border: '1px solid #fed7aa',
-      }} className="dark:bg-amber-950/20 dark:border-amber-900/40">
-        <p style={{ fontSize: '13px', color: '#92400e', lineHeight: '1.5' }}
-           className="dark:text-amber-400">
+        borderRadius: '12px',
+        borderWidth: '1px',
+        borderStyle: 'solid',
+      }} className="bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900/40">
+        <p style={{ fontSize: '13px', lineHeight: '1.5' }}
+           className="text-amber-800 dark:text-amber-400">
           Your data is stored locally on this device and never shared with third parties without your consent.
         </p>
       </div>
@@ -833,18 +836,21 @@ function AppearanceSheet({ theme, onSetTheme, onClose }) {
             style={{
               width: '100%', padding: '14px 16px', marginBottom: '10px',
               display: 'flex', alignItems: 'center', gap: '14px',
-              background: active ? 'var(--color-primary-50)' : 'transparent',
-              border: `1.5px solid ${active ? 'var(--color-primary-300)' : 'var(--color-surface-100)'}`,
               borderRadius: '14px', cursor: 'pointer',
               transition: 'all 0.15s', textAlign: 'left',
+              borderWidth: '1.5px',
+              borderStyle: 'solid',
             }}
-            className={active ? 'dark:bg-primary-950/30 dark:border-primary-700' : 'dark:border-surface-800'}
+            className={active 
+              ? 'bg-primary-50 dark:bg-primary-950/30 border-primary-300 dark:border-primary-700' 
+              : 'bg-transparent border-surface-100 dark:border-surface-800'}
           >
             <div style={{
               width: '44px', height: '44px', borderRadius: '12px', flexShrink: 0,
-              background: active ? 'var(--color-primary-100)' : 'var(--color-surface-100)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }} className={active ? 'dark:bg-primary-900/40 text-primary-600 dark:text-primary-400' : 'dark:bg-surface-800 text-surface-500 dark:text-surface-400'}>
+            }} className={active 
+              ? 'bg-primary-100 dark:bg-primary-900/40 text-primary-600 dark:text-primary-400' 
+              : 'bg-surface-100 dark:bg-surface-800 text-surface-500 dark:text-surface-400'}>
               {opt.icon}
             </div>
 
@@ -1130,10 +1136,12 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
           />
         </label>
 
-        <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', marginBottom: '4px', fontFamily: 'Epilogue, sans-serif' }}>
+        <h2 style={{ fontSize: '22px', fontWeight: '800', marginBottom: '4px', fontFamily: 'Epilogue, sans-serif' }}
+            className="text-surface-900 dark:text-surface-50">
           {displayName}
         </h2>
-        <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px' }}>
+        <p style={{ fontSize: '13px', marginBottom: '16px' }}
+           className="text-surface-500 dark:text-surface-400">
           {displayEmail}
         </p>
 
@@ -1167,10 +1175,9 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
           return (
             <div key={stat.label} style={{
               flex: 1, padding: '14px 8px', textAlign: 'center',
-              background: '#fff', borderRadius: '16px',
+              borderRadius: '16px',
               boxShadow: `0 4px 16px ${cfg.shadow}`,
-              border: '1px solid rgba(0,0,0,0.04)',
-            }}>
+            }} className="bg-white dark:bg-surface-900 border border-black/5 dark:border-surface-800">
               <div style={{
                 width: '36px', height: '36px', borderRadius: '10px',
                 background: cfg.gradient,
@@ -1188,10 +1195,12 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                 )}
               </div>
-              <div style={{ fontSize: '20px', fontWeight: '800', color: '#0f172a', lineHeight: '1', fontFamily: 'Epilogue, sans-serif' }}>
+              <div style={{ fontSize: '20px', fontWeight: '800', lineHeight: '1', fontFamily: 'Epilogue, sans-serif' }}
+                   className="text-surface-900 dark:text-surface-50">
                 {stat.value}
               </div>
-              <div style={{ fontSize: '10px', marginTop: '3px', color: '#94a3b8', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              <div style={{ fontSize: '10px', marginTop: '3px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.04em' }}
+                   className="text-surface-400 dark:text-surface-500">
                 {stat.label}
               </div>
             </div>
@@ -1209,16 +1218,15 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
             {section.title}
           </p>
           <div style={{
-            margin: '0 20px', background: '#fff', borderRadius: '18px',
+            margin: '0 20px', borderRadius: '18px',
             overflow: 'hidden',
             boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
-            border: '1px solid rgba(124,58,237,0.06)',
-          }}>
+          }} className="bg-white dark:bg-surface-900 border border-[rgba(124,58,237,0.06)] dark:border-surface-800">
             {section.items.map((item, i) => (
               <div key={item.label}>
                 <MenuItem item={item} />
                 {i < section.items.length - 1 && (
-                  <div style={{ height: '1px', background: '#f1f5f9', margin: '0 16px' }} />
+                  <div style={{ height: '1px', margin: '0 16px' }} className="bg-surface-100 dark:bg-surface-800/60" />
                 )}
               </div>
             ))}
@@ -1233,12 +1241,13 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
           onClick={onLogout}
           style={{
             width: '100%', padding: '14px',
-            background: '#fff1f2',
-            color: '#e11d48',
-            borderRadius: '16px', border: '1.5px solid #fecdd3', cursor: 'pointer',
+            borderRadius: '16px', cursor: 'pointer',
             fontSize: '14px', fontWeight: '700',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+            borderWidth: '1.5px',
+            borderStyle: 'solid',
           }}
+          className="bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-400 border-rose-200 dark:border-rose-900/40"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" strokeWidth="2" strokeLinecap="round">
