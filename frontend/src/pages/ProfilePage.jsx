@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../hooks/useLanguage';
 
 
 function ToggleSwitch({ on, onChange }) {
@@ -59,7 +61,7 @@ function InputField({ label, value, onChange, placeholder, error, type = 'text' 
 
 
 function Sheet({ title, onClose, children }) {
-  return (
+  return createPortal(
     <div
       style={{
         position: 'fixed', inset: 0, zIndex: 1000,
@@ -117,13 +119,14 @@ function Sheet({ title, onClose, children }) {
           {children}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
 /* ─── Edit Profile Sheet ────────────────────────────────── */
 
-function EditProfileSheet({ user, onUpdateProfile, onClose }) {
+function EditProfileSheet({ user, onUpdateProfile, onClose, t }) {
   const [name, setName] = useState(user?.name ?? '');
   const [email, setEmail] = useState(user?.email ?? '');
   const [errors, setErrors] = useState({});
@@ -133,8 +136,8 @@ function EditProfileSheet({ user, onUpdateProfile, onClose }) {
   const handleSave = async (e) => {
     e.preventDefault();
     const errs = {};
-    if (!name.trim()) errs.name = 'Name is required.';
-    if (!email.includes('@')) errs.email = 'Enter a valid email.';
+    if (!name.trim()) errs.name = t('editProfile.nameRequired');
+    if (!email.includes('@')) errs.email = t('editProfile.validEmail');
     if (Object.keys(errs).length) { setErrors(errs); return; }
     setSaving(true);
     await new Promise(r => setTimeout(r, 400));
@@ -148,14 +151,14 @@ function EditProfileSheet({ user, onUpdateProfile, onClose }) {
   return (
     <form onSubmit={handleSave}>
       <InputField
-        label="Full Name"
+        label={t('editProfile.fullName')}
         value={name}
         onChange={e => setName(e.target.value)}
-        placeholder="Your name"
+        placeholder={t('editProfile.yourName')}
         error={errors.name}
       />
       <InputField
-        label="Email Address"
+        label={t('editProfile.emailAddress')}
         type="email"
         value={email}
         onChange={e => setEmail(e.target.value)}
@@ -180,9 +183,9 @@ function EditProfileSheet({ user, onUpdateProfile, onClose }) {
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            Saved!
+            {t('editProfile.saved')}
           </>
-        ) : saving ? 'Saving…' : 'Save Changes'}
+        ) : saving ? t('editProfile.saving') : t('editProfile.saveChanges')}
       </button>
     </form>
   );
@@ -201,20 +204,17 @@ const LANGUAGES = [
 ];
 
 function LanguageSheet({ onClose }) {
-  const [selected, setSelected] = useState(
-    () => localStorage.getItem('lanka_lang') ?? 'en'
-  );
+  const { language, setLanguage } = useLanguage();
 
   const pick = (code) => {
-    setSelected(code);
-    localStorage.setItem('lanka_lang', code);
+    setLanguage(code);
     setTimeout(onClose, 300);
   };
 
   return (
     <div>
       {LANGUAGES.map((lang) => {
-        const active = selected === lang.code;
+        const active = language === lang.code;
         return (
           <button
             key={lang.code}
@@ -685,46 +685,41 @@ function AboutSheet() {
 
 /* ─── Stats & Menu data ─────────────────────────────────── */
 
+// STATS use stable string keys for label, translated in the render
 const STATS = [
   {
-    label: 'Places Visited', value: '12',
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f97316" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-        <circle cx="12" cy="10" r="3" fill="#f97316" stroke="none" />
-      </svg>
-    ),
+    labelKey: 'profile.placesVisited', value: '12',
   },
   {
-    label: 'Favorites', value: null,
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="#e11d48" stroke="#e11d48" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
-      </svg>
-    ),
+    labelKey: 'profile.favorites', value: null,
   },
   {
-    label: 'Reviews', value: '5',
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-      </svg>
-    ),
+    labelKey: 'profile.reviews', value: '5',
   },
 ];
 
 function MenuItem({ item }) {
   const [on, setOn] = useState(item.defaultOn ?? false);
 
+  const handleToggle = () => {
+    if (item.disabled) return;
+    const next = !on;
+    setOn(next);
+    if (item.onToggle) item.onToggle(next);
+  };
+
   return (
     <button
       type="button"
-      onClick={item.toggle ? () => setOn(v => !v) : item.onClick}
+      onClick={item.toggle ? handleToggle : item.onClick}
+      disabled={item.disabled}
       style={{
         display: 'flex', alignItems: 'center', gap: '14px',
         width: '100%', padding: '14px 20px',
-        background: 'none', border: 'none', cursor: item.toggle || item.chevron ? 'pointer' : 'default',
+        background: 'none', border: 'none',
+        cursor: item.disabled ? 'not-allowed' : (item.toggle || item.chevron ? 'pointer' : 'default'),
         textAlign: 'left',
+        opacity: item.disabled ? 0.5 : 1,
       }}
     >
       <div style={{
@@ -811,7 +806,7 @@ const THEME_OPTIONS = [
   },
 ];
 
-function AppearanceSheet({ theme, onSetTheme, onClose }) {
+function AppearanceSheet({ theme, onSetTheme, onClose, t }) {
   const [selected, setSelected] = useState(theme ?? 'system');
 
   const pick = (value) => {
@@ -890,7 +885,7 @@ function AppearanceSheet({ theme, onSetTheme, onClose }) {
           fontSize: '15px', fontWeight: '700', border: 'none', cursor: 'pointer',
         }}
       >
-        Done
+        {t('common.done')}
       </button>
     </div>
   );
@@ -898,18 +893,29 @@ function AppearanceSheet({ theme, onSetTheme, onClose }) {
 
 /* ─── ProfilePage ───────────────────────────────────────── */
 
-export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpdateProfile, onUpdateProfilePhoto, theme, onSetTheme }) {
+export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpdateProfile, onUpdateProfilePhoto, theme, onSetTheme, notifications }) {
+  const { t, language, setLanguage } = useLanguage();
   const [sheet, setSheet] = useState(null); // 'editProfile' | 'language' | 'privacy' | 'help' | 'feedback' | 'about' | 'appearance'
 
-  const [langLabel, setLangLabel] = useState(() => {
-    const code = localStorage.getItem('lanka_lang') ?? 'en';
-    return LANGUAGES.find(l => l.code === code)?.label ?? 'English';
-  });
+  const langLabel = LANGUAGES.find(l => l.code === language)?.label ?? 'English';
 
-  useEffect(() => {
-    const code = localStorage.getItem('lanka_lang') ?? 'en';
-    setLangLabel(LANGUAGES.find(l => l.code === code)?.label ?? 'English');
-  }, [sheet]);
+  // Derived notification status label
+  const notifLabel = !notifications?.supported
+    ? 'N/A'
+    : notifications.permission === 'denied'
+    ? t('notifications.blocked')
+    : notifications.enabled
+    ? t('notifications.enabled')
+    : t('notifications.disabled');
+
+  // Handle notification toggle
+  const handleNotificationToggle = async (on) => {
+    if (on) {
+      await notifications.enable();
+    } else {
+      notifications.disable();
+    }
+  };
 
   const initials = user?.initials ?? '?';
   const displayName = user?.name ?? 'Traveler';
@@ -927,7 +933,7 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
   const displayEmail = user?.email ?? '';
 
   const stats = STATS.map(s =>
-    s.label === 'Favorites' ? { ...s, value: String(favoritesCount) } : s
+    s.labelKey === 'profile.favorites' ? { ...s, value: String(favoritesCount) } : s
   );
 
   // Stats colors per item
@@ -939,7 +945,7 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
 
   const MENU_SECTIONS = [
     {
-      title: 'Preferences',
+      title: t('profile.preferences'),
       items: [
         {
           icon: (
@@ -948,7 +954,7 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
               <path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14" />
             </svg>
           ),
-          label: 'Language',
+          label: t('profile.language'),
           value: langLabel,
           chevron: true,
           onClick: () => setSheet('language'),
@@ -959,7 +965,7 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
               <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
             </svg>
           ),
-          label: 'Appearance',
+          label: t('profile.appearance'),
           value: theme === 'dark' ? 'Dark' : theme === 'light' ? 'Light' : 'System',
           chevron: true,
           onClick: () => setSheet('appearance'),
@@ -971,8 +977,8 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
               <circle cx="12" cy="10" r="3" />
             </svg>
           ),
-          label: 'Location Services',
-          value: 'On',
+          label: t('profile.locationServices'),
+          value: t('common.on'),
           chevron: false,
           toggle: true,
           defaultOn: true,
@@ -987,16 +993,19 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
               <line x1="14" y1="1" x2="14" y2="4" />
             </svg>
           ),
-          label: 'Notifications',
-          value: 'Off',
+          label: t('profile.notifications'),
+          value: notifLabel,
           chevron: false,
-          toggle: true,
-          defaultOn: false,
+          toggle: notifications?.supported && notifications.permission !== 'denied',
+          defaultOn: notifications?.enabled ?? false,
+          onToggle: handleNotificationToggle,
+          // When permission is 'denied', show a disabled toggle with a blocked state
+          disabled: notifications?.permission === 'denied',
         },
       ],
     },
     {
-      title: 'Account',
+      title: t('profile.account'),
       items: [
         {
           icon: (
@@ -1005,7 +1014,7 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
               <circle cx="12" cy="7" r="4" />
             </svg>
           ),
-          label: 'Edit Profile',
+          label: t('profile.editProfile'),
           chevron: true,
           onClick: () => setSheet('editProfile'),
         },
@@ -1016,14 +1025,14 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
               <path d="M7 11V7a5 5 0 0110 0v4" />
             </svg>
           ),
-          label: 'Privacy & Security',
+          label: t('profile.privacySecurity'),
           chevron: true,
           onClick: () => setSheet('privacy'),
         },
       ],
     },
     {
-      title: 'Support',
+      title: t('profile.support'),
       items: [
         {
           icon: (
@@ -1033,7 +1042,7 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
               <line x1="12" y1="17" x2="12.01" y2="17" />
             </svg>
           ),
-          label: 'Help & FAQ',
+          label: t('profile.helpFaq'),
           chevron: true,
           onClick: () => setSheet('help'),
         },
@@ -1043,7 +1052,7 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
               <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
             </svg>
           ),
-          label: 'Send Feedback',
+          label: t('profile.sendFeedback'),
           chevron: true,
           onClick: () => setSheet('feedback'),
         },
@@ -1054,7 +1063,7 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
               <polyline points="14 2 14 8 20 8" />
             </svg>
           ),
-          label: 'About LankaGuide',
+          label: t('profile.aboutApp'),
           value: 'v1.0.0',
           chevron: true,
           onClick: () => setSheet('about'),
@@ -1162,7 +1171,7 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
             <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
             <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
           </svg>
-          Edit Profile
+          {t('profile.editProfile')}
         </button>
       </div>
 
@@ -1172,8 +1181,9 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
       }}>
         {stats.map((stat, i) => {
           const cfg = STAT_CONFIGS[i] || STAT_CONFIGS[0];
+          const label = t(stat.labelKey);
           return (
-            <div key={stat.label} style={{
+            <div key={stat.labelKey} style={{
               flex: 1, padding: '14px 8px', textAlign: 'center',
               borderRadius: '16px',
               boxShadow: `0 4px 16px ${cfg.shadow}`,
@@ -1184,14 +1194,13 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 margin: '0 auto 6px',
               }}>
-                {/* Recolor icon to white */}
-                {stat.label === 'Places Visited' && (
+                {stat.labelKey === 'profile.placesVisited' && (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3" fill="white" stroke="none"/></svg>
                 )}
-                {stat.label === 'Favorites' && (
+                {stat.labelKey === 'profile.favorites' && (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
                 )}
-                {stat.label === 'Reviews' && (
+                {stat.labelKey === 'profile.reviews' && (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                 )}
               </div>
@@ -1201,7 +1210,7 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
               </div>
               <div style={{ fontSize: '10px', marginTop: '3px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.04em' }}
                    className="text-surface-400 dark:text-surface-500">
-                {stat.label}
+                {label}
               </div>
             </div>
           );
@@ -1255,54 +1264,54 @@ export default function ProfilePage({ user, favoritesCount = 0, onLogout, onUpda
             <polyline points="16 17 21 12 16 7" />
             <line x1="21" y1="12" x2="9" y2="12" />
           </svg>
-          Sign Out
+          {t('profile.signOut')}
         </button>
       </div>
 
       {/* Explore CTA */}
       <div style={{ padding: '8px 20px 16px', textAlign: 'center' }}>
         <p className="text-surface-400 dark:text-surface-600" style={{ fontSize: '12px' }}>
-          Discover more of Sri Lanka →{' '}
+          {t('profile.discoverMore')}{' '}
           <Link to="/explore" className="text-primary-600 dark:text-primary-400 font-semibold">
-            Explore now
+            {t('profile.exploreNow')}
           </Link>
         </p>
       </div>
 
       {/* Sheets */}
       {sheet === 'editProfile' && (
-        <Sheet title="Edit Profile" onClose={() => setSheet(null)}>
-          <EditProfileSheet user={user} onUpdateProfile={onUpdateProfile} onClose={() => setSheet(null)} />
+        <Sheet title={t('profile.editProfile')} onClose={() => setSheet(null)}>
+          <EditProfileSheet user={user} onUpdateProfile={onUpdateProfile} onClose={() => setSheet(null)} t={t} />
         </Sheet>
       )}
       {sheet === 'language' && (
-        <Sheet title="Language" onClose={() => setSheet(null)}>
+        <Sheet title={t('profile.language')} onClose={() => setSheet(null)}>
           <LanguageSheet onClose={() => setSheet(null)} />
         </Sheet>
       )}
       {sheet === 'privacy' && (
-        <Sheet title="Privacy & Security" onClose={() => setSheet(null)}>
+        <Sheet title={t('profile.privacySecurity')} onClose={() => setSheet(null)}>
           <PrivacySheet onClose={() => setSheet(null)} />
         </Sheet>
       )}
       {sheet === 'help' && (
-        <Sheet title="Help & FAQ" onClose={() => setSheet(null)}>
+        <Sheet title={t('profile.helpFaq')} onClose={() => setSheet(null)}>
           <HelpSheet />
         </Sheet>
       )}
       {sheet === 'feedback' && (
-        <Sheet title="Send Feedback" onClose={() => setSheet(null)}>
+        <Sheet title={t('profile.sendFeedback')} onClose={() => setSheet(null)}>
           <FeedbackSheet user={user} onClose={() => setSheet(null)} />
         </Sheet>
       )}
       {sheet === 'about' && (
-        <Sheet title="About LankaGuide" onClose={() => setSheet(null)}>
+        <Sheet title={t('profile.aboutApp')} onClose={() => setSheet(null)}>
           <AboutSheet />
         </Sheet>
       )}
       {sheet === 'appearance' && (
-        <Sheet title="Appearance" onClose={() => setSheet(null)}>
-          <AppearanceSheet theme={theme} onSetTheme={onSetTheme} onClose={() => setSheet(null)} />
+        <Sheet title={t('profile.appearance')} onClose={() => setSheet(null)}>
+          <AppearanceSheet theme={theme} onSetTheme={onSetTheme} onClose={() => setSheet(null)} t={t} />
         </Sheet>
       )}
 

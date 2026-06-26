@@ -2,6 +2,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useFavorites } from './hooks/useFavorites';
 import { useAuth } from './hooks/useAuth';
 import { useTheme } from './hooks/useTheme';
+import { useNotifications } from './hooks/useNotifications';
+import { LanguageProvider, useLanguage } from './hooks/useLanguage';
 import BottomNav from './components/BottomNav';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
@@ -11,10 +13,36 @@ import AttractionDetailPage from './pages/AttractionDetailPage';
 import ProfilePage from './pages/ProfilePage';
 import LoginPage from './pages/LoginPage';
 
-export default function App() {
+function AppContent() {
   const { favorites, isFavorite, toggleFavorite, clearFavorites, favoritesCount } = useFavorites();
   const { user, isLoggedIn, login, signup, logout, updateProfile, updateProfilePhoto } = useAuth();
   const { theme, setTheme } = useTheme();
+  const notifications = useNotifications();
+  const { t } = useLanguage();
+
+  // Wrap toggleFavorite to send a notification when adding
+  const handleToggleFavorite = (id, attractionName) => {
+    const wasAlreadyFavorite = isFavorite(id);
+    toggleFavorite(id);
+    if (!wasAlreadyFavorite) {
+      notifications.notify(
+        `❤️ ${t('notifications.addedToFavorites')}`,
+        attractionName || 'Attraction saved to your favorites.',
+      );
+    }
+  };
+
+  // Wrap updateProfile to send a notification on success
+  const handleUpdateProfile = (data) => {
+    const result = updateProfile(data);
+    if (result.ok) {
+      notifications.notify(
+        t('notifications.profileUpdated'),
+        t('notifications.profileUpdatedBody'),
+      );
+    }
+    return result;
+  };
 
   if (!isLoggedIn) {
     return <LoginPage onLogin={login} onSignup={signup} />;
@@ -30,7 +58,7 @@ export default function App() {
           element={
             <ExplorePage
               isFavorite={isFavorite}
-              onToggleFavorite={toggleFavorite}
+              onToggleFavorite={handleToggleFavorite}
             />
           }
         />
@@ -40,7 +68,7 @@ export default function App() {
             <FavoritesPage
               favorites={favorites}
               isFavorite={isFavorite}
-              onToggleFavorite={toggleFavorite}
+              onToggleFavorite={handleToggleFavorite}
               onClearFavorites={clearFavorites}
             />
           }
@@ -50,7 +78,7 @@ export default function App() {
           element={
             <AttractionDetailPage
               isFavorite={isFavorite}
-              onToggleFavorite={toggleFavorite}
+              onToggleFavorite={handleToggleFavorite}
             />
           }
         />
@@ -61,10 +89,11 @@ export default function App() {
               user={user}
               favoritesCount={favoritesCount}
               onLogout={logout}
-              onUpdateProfile={updateProfile}
+              onUpdateProfile={handleUpdateProfile}
               onUpdateProfilePhoto={updateProfilePhoto}
               theme={theme}
               onSetTheme={setTheme}
+              notifications={notifications}
             />
           }
         />
@@ -86,8 +115,8 @@ export default function App() {
                   <line x1="3" y1="10" x2="21" y2="10" />
                 </svg>
               </div>
-              <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', marginBottom: '8px', fontFamily: 'Epilogue, sans-serif' }}>No Bookings Yet</h2>
-              <p style={{ fontSize: '14px', color: '#64748b', lineHeight: '1.6' }}>Your trip bookings will appear here once you plan your adventures.</p>
+              <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', marginBottom: '8px', fontFamily: 'Epilogue, sans-serif' }}>{t('bookings.noBookings')}</h2>
+              <p style={{ fontSize: '14px', color: '#64748b', lineHeight: '1.6' }}>{t('bookings.willAppear')}</p>
             </div>
           }
         />
@@ -96,5 +125,13 @@ export default function App() {
 
       <BottomNav favoritesCount={favoritesCount} />
     </>
+  );
+}
+
+export default function App() {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   );
 }
