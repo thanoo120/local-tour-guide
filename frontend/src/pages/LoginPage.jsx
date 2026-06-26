@@ -262,20 +262,7 @@ export default function LoginPage({ onLogin, onSignup }) {
               {submitting ? 'Signing in…' : 'Sign In →'}
             </button>
 
-            <div
-              className="animate-fade-in-up stagger-5"
-              style={{
-                textAlign: 'center', marginTop: '20px', padding: '12px 16px',
-                background: '#f1f5f9', borderRadius: '12px',
-              }}
-            >
-              <p style={{ fontSize: '12px', color: '#64748b', marginBottom: '4px', fontWeight: '600' }}>DEMO CREDENTIALS</p>
-              <p style={{ fontSize: '13px', color: '#334155' }}>
-                <span style={{ color: '#7c3aed', fontWeight: '600' }}>demo@lankaguide.com</span>
-                {' / '}
-                <span style={{ color: '#7c3aed', fontWeight: '600' }}>demo1234</span>
-              </p>
-            </div>
+
           </form>
         ) : (
           <form onSubmit={handleSignup}>
