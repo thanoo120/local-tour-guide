@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useLanguage } from '../hooks/useLanguage';
 
 function SunIcon() {
   return (
@@ -29,6 +30,7 @@ function MoonIcon() {
 
 export default function Header({ user, theme, onToggleTheme }) {
   const [animating, setAnimating] = useState(false);
+  const { t } = useLanguage();
   const displayName = user?.name ?? user?.initials ?? 'Guest';
   const isDark = theme === 'dark';
 
@@ -75,7 +77,7 @@ export default function Header({ user, theme, onToggleTheme }) {
             LankaGuide
           </h1>
           <span style={{ fontSize: '10px', color: 'rgba(167,139,250,0.7)', fontWeight: '400', lineHeight: '1.4', marginTop: '1px' }}>
-            Sri Lanka Travel Companion
+            {t('header.subtitle')}
           </span>
         </div>
       </div>

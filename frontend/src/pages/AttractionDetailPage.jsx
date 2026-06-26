@@ -281,7 +281,7 @@ export default function AttractionDetailPage({ isFavorite, onToggleFavorite }) {
 
   const handleToggleFav = () => {
     setFavAnim(true);
-    onToggleFavorite(attraction.id);
+    onToggleFavorite(attraction.id, attraction.name);
     setTimeout(() => setFavAnim(false), 600);
   };
 

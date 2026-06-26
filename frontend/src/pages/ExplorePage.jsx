@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAttractions } from '../hooks/useAttractions';
 import { useGeolocation } from '../hooks/useGeolocation';
 import AttractionCard from '../components/AttractionCard';
+import { useLanguage } from '../hooks/useLanguage';
 
 const CATEGORIES = ['All', 'Nature', 'Historical', 'Hotels', 'Beach', 'Religious', 'Adventure'];
 
@@ -25,7 +26,8 @@ const LANDMARK_OPTIONS = [
 ];
 
 export default function ExplorePage({ isFavorite, onToggleFavorite }) {
-  const { getFeaturedAttractions, getAttractionsByCategory, searchAttractions, loading } = useAttractions();
+  const { t } = useLanguage();
+  const { getFeaturedAttractions, getAttractionsByCategory, searchAttractions, loading, attractions } = useAttractions();
   const { position, requestPosition, loading: gpsLoading, error: gpsError, permissionStatus, isUsingDefault } = useGeolocation();
 
   const [activeTab, setActiveTab] = useState('grid');
@@ -35,18 +37,17 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
   const chipScrollRef = useRef(null);
 
   const trimmed = searchQuery.trim();
-  const featured = getFeaturedAttractions();
   const displayed = trimmed.length >= 2
     ? searchAttractions(trimmed)
     : activeCategory !== 'All'
       ? getAttractionsByCategory(activeCategory)
-      : featured;
+      : attractions; // Show ALL places by default
 
   const sectionTitle = trimmed.length >= 2
-    ? `Results for "${trimmed}"`
+    ? `${t('explore.resultsFor')} "${trimmed}"`
     : activeCategory !== 'All'
-      ? `${activeCategory} Spots`
-      : 'Featured for You';
+      ? `${t(`category.${activeCategory}`)} ${t('explore.spots')}`
+      : t('explore.featuredForYou');
 
   const currentLandmark = LANDMARK_OPTIONS[selectedLandmark];
 
@@ -101,7 +102,7 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
               </div>
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: '13px', fontWeight: '700', color: '#0f172a', lineHeight: 1.2 }}>
-                  {gpsLoading ? 'Getting your location…' : 'Current Location'}
+                  {gpsLoading ? t('explore.gettingLocation') : t('explore.currentLocation')}
                 </div>
                 <div style={{ fontSize: '11px', marginTop: '2px', fontWeight: '500',
                   color: permissionStatus === 'granted' ? '#059669'
@@ -109,14 +110,14 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
                        : '#94a3b8',
                 }}>
                   {gpsLoading
-                    ? 'Please wait…'
+                    ? t('explore.pleaseWait')
                     : permissionStatus === 'granted' && !isUsingDefault
-                    ? `GPS active · ${position.latitude?.toFixed(4)}, ${position.longitude?.toFixed(4)}`
+                    ? `${t('explore.gpsActive')} · ${position.latitude?.toFixed(4)}, ${position.longitude?.toFixed(4)}`
                     : permissionStatus === 'denied'
-                    ? 'Permission denied — using fallback'
+                    ? t('explore.permissionDenied')
                     : isUsingDefault
-                    ? 'Using default (Colombo)'
-                    : 'Tap to enable GPS'}
+                    ? t('explore.usingDefault')
+                    : t('explore.tapToEnable')}
                 </div>
               </div>
             </div>
@@ -147,27 +148,27 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
               }}
             >
               {gpsLoading ? (
-                <>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
-                       style={{ animation: 'spin 1s linear infinite' }}>
-                    <circle cx="12" cy="12" r="9" strokeDasharray="28 56" strokeLinecap="round"/>
-                  </svg>
-                  Locating…
-                </>
+                  <>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                         style={{ animation: 'spin 1s linear infinite' }}>
+                      <circle cx="12" cy="12" r="9" strokeDasharray="28 56" strokeLinecap="round"/>
+                    </svg>
+                    {t('explore.locating')}
+                  </>
               ) : permissionStatus === 'granted' ? (
-                <>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                    <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/>
-                  </svg>
-                  Refresh
-                </>
+                  <>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                      <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/>
+                    </svg>
+                    {t('explore.refresh')}
+                  </>
               ) : (
-                <>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                    <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/>
-                  </svg>
-                  Use GPS
-                </>
+                  <>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                      <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/>
+                    </svg>
+                    {t('explore.useGps')}
+                  </>
               )}
             </button>
           </div>
@@ -184,7 +185,7 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
               </svg>
               <div>
                 <p style={{ fontSize: '12px', fontWeight: '700', color: '#dc2626', marginBottom: '2px' }}>
-                  GPS access blocked
+                  {t('explore.gpsBlocked')}
                 </p>
                 <p style={{ fontSize: '11px', color: '#ef4444', lineHeight: '1.5' }}>
                   {gpsError.toLowerCase().includes('denied')

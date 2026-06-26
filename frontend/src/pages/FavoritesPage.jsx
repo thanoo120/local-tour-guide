@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom';
 import { useAttractions } from '../hooks/useAttractions';
 import { useGeolocation } from '../hooks/useGeolocation';
 import AttractionCard from '../components/AttractionCard';
+import { useLanguage } from '../hooks/useLanguage';
 
 export default function FavoritesPage({ favorites, isFavorite, onToggleFavorite, onClearFavorites }) {
+  const { t } = useLanguage();
   const { getAttractionById, loading } = useAttractions();
   const { position } = useGeolocation();
 
@@ -42,10 +44,10 @@ export default function FavoritesPage({ favorites, isFavorite, onToggleFavorite,
             </div>
             <div>
               <h1 style={{ color: '#fff', fontWeight: 800, fontSize: '22px', lineHeight: 1.2, margin: 0, fontFamily: 'Epilogue, sans-serif' }}>
-                My Favourites
+                {t('favorites.title')}
               </h1>
               <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', margin: '2px 0 0' }}>
-                {favoriteAttractions.length} saved place{favoriteAttractions.length !== 1 ? 's' : ''}
+                {favoriteAttractions.length} {favoriteAttractions.length !== 1 ? t('favorites.savedPlacesPlural') : t('favorites.savedPlaces')}
               </p>
             </div>
           </div>
@@ -66,7 +68,7 @@ export default function FavoritesPage({ favorites, isFavorite, onToggleFavorite,
                 position: 'relative', zIndex: 1,
               }}
             >
-              Clear all
+              {t('favorites.clearAll')}
             </button>
           )}
         </div>
@@ -98,10 +100,10 @@ export default function FavoritesPage({ favorites, isFavorite, onToggleFavorite,
             </svg>
           </div>
           <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#0f172a', marginBottom: '8px', fontFamily: 'Epilogue, sans-serif' }}>
-            No favorites yet
+            {t('favorites.noFavorites')}
           </h3>
           <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '28px', lineHeight: '1.6', maxWidth: '260px' }}>
-            Tap the heart icon on any attraction to save it here for quick access.
+            {t('favorites.tapHeart')}
           </p>
           <Link
             to="/explore"
@@ -112,7 +114,7 @@ export default function FavoritesPage({ favorites, isFavorite, onToggleFavorite,
               boxShadow: '0 6px 20px rgba(244,63,94,0.35)',
             }}
           >
-            Explore Attractions →
+            {t('favorites.exploreAttractions')}
           </Link>
         </div>
       ) : (
