@@ -83,7 +83,7 @@ export default function AttractionCard({ attraction, userPosition, isFavorite, o
        
         <FavoriteButton
           isFavorite={isFavorite}
-          onToggle={() => onToggleFavorite(attraction.id)}
+          onToggle={() => onToggleFavorite(attraction.id, attraction.name)}
           size={compact ? 'sm' : 'md'}
           className="absolute top-2.5 right-2.5 z-10"
         />

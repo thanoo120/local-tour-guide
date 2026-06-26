@@ -27,7 +27,7 @@ const LANDMARK_OPTIONS = [
 
 export default function ExplorePage({ isFavorite, onToggleFavorite }) {
   const { t } = useLanguage();
-  const { getFeaturedAttractions, getAttractionsByCategory, searchAttractions, loading } = useAttractions();
+  const { getFeaturedAttractions, getAttractionsByCategory, searchAttractions, loading, attractions } = useAttractions();
   const { position, requestPosition, loading: gpsLoading, error: gpsError, permissionStatus, isUsingDefault } = useGeolocation();
 
   const [activeTab, setActiveTab] = useState('grid');
@@ -37,12 +37,11 @@ export default function ExplorePage({ isFavorite, onToggleFavorite }) {
   const chipScrollRef = useRef(null);
 
   const trimmed = searchQuery.trim();
-  const featured = getFeaturedAttractions();
   const displayed = trimmed.length >= 2
     ? searchAttractions(trimmed)
     : activeCategory !== 'All'
       ? getAttractionsByCategory(activeCategory)
-      : featured;
+      : attractions; // Show ALL places by default
 
   const sectionTitle = trimmed.length >= 2
     ? `${t('explore.resultsFor')} "${trimmed}"`

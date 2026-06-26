@@ -35,8 +35,8 @@ function InputField({ label, value, onChange, placeholder, error, type = 'text' 
     <div style={{ marginBottom: '16px' }}>
       <label style={{
         display: 'block', fontSize: '13px', fontWeight: '600',
-        color: 'var(--color-surface-600)', marginBottom: '6px',
-      }} className="dark:text-surface-400">
+        marginBottom: '6px',
+      }} className="text-surface-600 dark:text-surface-400">
         {label}
       </label>
       <input
@@ -47,12 +47,14 @@ function InputField({ label, value, onChange, placeholder, error, type = 'text' 
         style={{
           width: '100%', height: '50px',
           padding: '0 16px', borderRadius: '12px', fontSize: '15px',
-          border: `1.5px solid ${error ? '#f87171' : 'var(--color-surface-200)'}`,
-          background: 'var(--color-surface-50)',
-          color: 'var(--color-surface-900)',
+          borderStyle: 'solid', borderWidth: '1.5px',
           outline: 'none', boxSizing: 'border-box',
         }}
-        className="dark:bg-surface-800 dark:text-surface-100 dark:border-surface-700"
+        className={`${
+          error
+            ? 'border-red-400 dark:border-red-500'
+            : 'border-surface-200 dark:border-surface-700'
+        } bg-surface-50 dark:bg-surface-800 text-surface-900 dark:text-surface-100`}
       />
       {error && <p style={{ fontSize: '12px', color: '#ef4444', marginTop: '4px' }}>{error}</p>}
     </div>
@@ -66,43 +68,40 @@ function Sheet({ title, onClose, children }) {
       style={{
         position: 'fixed', inset: 0, zIndex: 1000,
         background: 'rgba(0,0,0,0.45)',
-        display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
+        backdropFilter: 'blur(4px)',
+        WebkitBackdropFilter: 'blur(4px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: '16px',
       }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div
         style={{
-          width: '100%', maxWidth: '430px',
-          background: 'var(--color-surface-50)',
-          borderRadius: '24px 24px 0 0',
-          maxHeight: '88dvh', display: 'flex', flexDirection: 'column',
-          animation: 'slideInUp 0.28s cubic-bezier(0.34,1.26,0.64,1)',
+          width: '100%', maxWidth: '400px',
+          borderRadius: '24px',
+          maxHeight: '85dvh', display: 'flex', flexDirection: 'column',
+          boxShadow: '0 20px 25px -5px rgba(0,0,0,0.15), 0 10px 10px -5px rgba(0,0,0,0.05)',
         }}
-        className="dark:bg-surface-900"
+        className="bg-surface-50 dark:bg-surface-900 animate-modal-pop"
       >
-        {/* Handle + header */}
-        <div style={{ padding: '12px 20px 0', flexShrink: 0 }}>
-          <div style={{
-            width: '40px', height: '4px', borderRadius: '2px',
-            background: 'var(--color-surface-300)', margin: '0 auto 16px',
-          }} className="dark:bg-surface-700" />
+        {/* Header */}
+        <div style={{ padding: '20px 20px 0', flexShrink: 0 }}>
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            paddingBottom: '12px',
-            borderBottom: '1px solid var(--color-surface-100)',
-          }} className="dark:border-surface-800">
-            <h3 style={{ fontSize: '17px', fontWeight: '700' }}
+            paddingBottom: '14px',
+          }} className="border-b border-surface-100 dark:border-surface-800">
+            <h3 style={{ fontSize: '18px', fontWeight: '700' }}
                 className="text-surface-900 dark:text-surface-100">{title}</h3>
             <button
               type="button"
               onClick={onClose}
               style={{
                 width: '32px', height: '32px', borderRadius: '50%',
-                background: 'var(--color-surface-100)',
                 border: 'none', cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
+                transition: 'background-color 0.2s',
               }}
-              className="dark:bg-surface-800"
+              className="bg-surface-100 hover:bg-surface-200 dark:bg-surface-800 dark:hover:bg-surface-700"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
@@ -115,7 +114,7 @@ function Sheet({ title, onClose, children }) {
         </div>
 
         {/* Scrollable body */}
-        <div style={{ overflowY: 'auto', flex: 1, padding: '16px 20px 32px' }}>
+        <div style={{ overflowY: 'auto', flex: 1, padding: '16px 20px 24px' }}>
           {children}
         </div>
       </div>
@@ -171,12 +170,18 @@ function EditProfileSheet({ user, onUpdateProfile, onClose, t }) {
         disabled={saving || saved}
         style={{
           width: '100%', height: '52px', borderRadius: '14px', marginTop: '8px',
-          background: saved ? '#16a34a' : saving ? 'var(--color-surface-300)' : 'var(--color-primary-600)',
-          color: '#fff', fontSize: '16px', fontWeight: '700',
           border: 'none', cursor: saving || saved ? 'default' : 'pointer',
-          transition: 'background 0.2s',
+          transition: 'all 0.2s',
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+          fontWeight: '700', fontSize: '16px',
         }}
+        className={
+          saved
+            ? 'bg-green-600 text-white'
+            : saving
+            ? 'bg-surface-300 dark:bg-surface-700 text-surface-600 dark:text-surface-400'
+            : 'bg-primary-600 hover:bg-primary-700 text-white shadow-lg shadow-primary-600/20'
+        }
       >
         {saved ? (
           <>
@@ -328,8 +333,8 @@ function PrivacySheet({ onClose }) {
             <ToggleSwitch on={settings[s.key]} onChange={() => toggle(s.key)} />
           </div>
           {i < PRIVACY_SETTINGS.length - 1 && (
-            <div style={{ height: '1px', background: 'var(--color-surface-100)' }}
-                 className="dark:bg-surface-800" />
+            <div style={{ height: '1px' }}
+                 className="bg-surface-100 dark:bg-surface-800" />
           )}
         </div>
       ))}
@@ -412,12 +417,15 @@ function HelpSheet() {
             style={{
               width: '100%', padding: '14px 16px',
               display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px',
-              background: open === i ? 'var(--color-primary-50)' : 'var(--color-surface-100)',
               border: 'none', borderRadius: open === i ? '12px 12px 0 0' : '12px',
               cursor: 'pointer', textAlign: 'left',
               transition: 'all 0.15s',
             }}
-            className={open === i ? 'dark:bg-primary-950/30' : 'dark:bg-surface-800'}
+            className={
+              open === i 
+                ? 'bg-primary-50 dark:bg-primary-950/30' 
+                : 'bg-surface-100 dark:bg-surface-800'
+            }
           >
             <span style={{ fontSize: '14px', fontWeight: '600', lineHeight: '1.4', flex: 1 }}
                   className={open === i ? 'text-primary-700 dark:text-primary-400' : 'text-surface-800 dark:text-surface-200'}>
@@ -436,10 +444,8 @@ function HelpSheet() {
           {open === i && (
             <div style={{
               padding: '12px 16px 14px',
-              background: 'var(--color-primary-50)',
               borderRadius: '0 0 12px 12px',
-              borderTop: '1px solid var(--color-primary-100)',
-            }} className="dark:bg-primary-950/20 dark:border-primary-900/40">
+            }} className="bg-primary-50 dark:bg-primary-950/20 border-t border-primary-100 dark:border-primary-900/40">
               <p style={{ fontSize: '14px', lineHeight: '1.6', margin: 0 }}
                  className="text-surface-600 dark:text-surface-400">
                 {item.a}
@@ -563,13 +569,12 @@ function FeedbackSheet({ user, onClose }) {
             onClick={() => setCategory(c.value)}
             style={{
               padding: '8px 14px', borderRadius: '999px', fontSize: '13px', fontWeight: '600',
-              border: `1.5px solid ${category === c.value ? 'var(--color-primary-400)' : 'var(--color-surface-200)'}`,
-              background: category === c.value ? 'var(--color-primary-50)' : 'transparent',
+              borderStyle: 'solid', borderWidth: '1.5px',
               cursor: 'pointer', transition: 'all 0.15s',
             }}
             className={category === c.value
-              ? 'text-primary-700 dark:bg-primary-950/30 dark:text-primary-400 dark:border-primary-700'
-              : 'text-surface-600 dark:text-surface-400 dark:border-surface-700'}
+              ? 'border-primary-400 dark:border-primary-700 bg-primary-50 dark:bg-primary-950/30 text-primary-700 dark:text-primary-400'
+              : 'border-surface-200 dark:border-surface-700 bg-transparent text-surface-600 dark:text-surface-400'}
           >
             {c.label}
           </button>
@@ -589,12 +594,15 @@ function FeedbackSheet({ user, onClose }) {
           rows={5}
           style={{
             width: '100%', padding: '14px 16px', borderRadius: '12px', fontSize: '15px',
-            border: `1.5px solid ${error ? '#f87171' : 'var(--color-surface-200)'}`,
-            background: 'var(--color-surface-50)', color: 'var(--color-surface-900)',
+            borderStyle: 'solid', borderWidth: '1.5px',
             outline: 'none', resize: 'vertical', boxSizing: 'border-box', lineHeight: '1.5',
             fontFamily: 'inherit',
           }}
-          className="dark:bg-surface-800 dark:text-surface-100 dark:border-surface-700"
+          className={`${
+            error
+              ? 'border-red-400 dark:border-red-500'
+              : 'border-surface-200 dark:border-surface-700'
+          } bg-surface-50 dark:bg-surface-800 text-surface-900 dark:text-surface-100`}
         />
         {error && <p style={{ fontSize: '12px', color: '#ef4444', marginTop: '4px' }}>{error}</p>}
         <p style={{ fontSize: '12px', marginTop: '4px', textAlign: 'right' }}
@@ -608,10 +616,14 @@ function FeedbackSheet({ user, onClose }) {
         disabled={submitting}
         style={{
           width: '100%', height: '52px', borderRadius: '14px', marginTop: '12px',
-          background: submitting ? 'var(--color-surface-300)' : 'var(--color-primary-600)',
-          color: '#fff', fontSize: '16px', fontWeight: '700',
-          border: 'none', cursor: submitting ? 'default' : 'pointer', transition: 'background 0.2s',
+          border: 'none', cursor: submitting ? 'default' : 'pointer', transition: 'all 0.2s',
+          fontWeight: '700', fontSize: '16px',
         }}
+        className={
+          submitting
+            ? 'bg-surface-300 dark:bg-surface-700 text-surface-600 dark:text-surface-400'
+            : 'bg-primary-600 hover:bg-primary-700 text-white shadow-lg shadow-primary-600/20'
+        }
       >
         {submitting ? 'Sending…' : 'Send Feedback'}
       </button>
@@ -660,8 +672,7 @@ function AboutSheet() {
         <div key={row.label} style={{
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
           padding: '12px 0',
-          borderBottom: '1px solid var(--color-surface-100)',
-        }} className="dark:border-surface-800">
+        }} className="border-b border-surface-100 dark:border-surface-800">
           <span style={{ fontSize: '14px' }} className="text-surface-500 dark:text-surface-400">
             {row.label}
           </span>
@@ -708,20 +719,17 @@ function MenuItem({ item }) {
     if (item.onToggle) item.onToggle(next);
   };
 
-  return (
-    <button
-      type="button"
-      onClick={item.toggle ? handleToggle : item.onClick}
-      disabled={item.disabled}
-      style={{
-        display: 'flex', alignItems: 'center', gap: '14px',
-        width: '100%', padding: '14px 20px',
-        background: 'none', border: 'none',
-        cursor: item.disabled ? 'not-allowed' : (item.toggle || item.chevron ? 'pointer' : 'default'),
-        textAlign: 'left',
-        opacity: item.disabled ? 0.5 : 1,
-      }}
-    >
+  // Toggle rows use a div wrapper to avoid nested <button> in <button> (invalid HTML)
+  const sharedStyle = {
+    display: 'flex', alignItems: 'center', gap: '14px',
+    width: '100%', padding: '14px 20px',
+    background: 'none', border: 'none',
+    textAlign: 'left',
+    opacity: item.disabled ? 0.5 : 1,
+  };
+
+  const inner = (
+    <>
       <div style={{
         width: '38px', height: '38px', borderRadius: '12px',
         background: 'linear-gradient(135deg, #ede9fe, #e0f2fe)',
@@ -754,9 +762,41 @@ function MenuItem({ item }) {
           )}
         </div>
       )}
+    </>
+  );
+
+  if (item.toggle) {
+    return (
+      <div
+        role="button"
+        tabIndex={item.disabled ? -1 : 0}
+        onClick={handleToggle}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleToggle(); }}
+        aria-disabled={item.disabled}
+        style={{
+          ...sharedStyle,
+          cursor: item.disabled ? 'not-allowed' : 'pointer',
+        }}
+      >
+        {inner}
+      </div>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={item.onClick}
+      style={{
+        ...sharedStyle,
+        cursor: item.chevron ? 'pointer' : 'default',
+      }}
+    >
+      {inner}
     </button>
   );
 }
+
 
 /* ─── Appearance Sheet ──────────────────────────────────── */
 
